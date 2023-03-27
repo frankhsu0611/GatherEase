@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from django.contrib.auth.models import User
+from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
@@ -16,12 +16,15 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
+        userCategory = request.POST['userCategory']
+        userCountry = request.POST['userCountry']
+        conferenceCode = request.POST['conferenceCode']
         
-        if User.objects.filter(username=username).exists():
+        if UserProfile.objects.filter(username=username).exists():
             messages.error(request, "Username already exists")
             return redirect('home')
         
-        if User.objects.filter(email=email).exists():
+        if UserProfile.objects.filter(email=email).exists():
             messages.error(request, "Email already exists")
             return redirect('home')
         
@@ -37,9 +40,20 @@ def signup(request):
             messages.error(request, "Username must be alphanumeric")
             return redirect('home')
         
-        myuser = User.objects.create_user(username, email, pass1)
+        if userCategory not in ['speaker', 'attendee']: # add more user categories here
+            messages.error(request, "User category must be speaker or attendee")
+            return redirect('home')
+        
+        if conferenceCode not in ['ICEASS2021', 'ICEASS2022', 'ICEASS2023']: # add more conference codes here
+            messages.error(request, "Conference code is invalid")
+            return redirect('home')
+        
+        myuser = UserProfile.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
+        myuser.userCategory = userCategory
+        myuser.conferenceCode = conferenceCode
+        myuser.userCountry = userCountry
         myuser.save() # save to database after updating fields
         
         messages.success(request, "Your account has been successfully created")
