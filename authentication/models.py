@@ -7,7 +7,7 @@ from django.dispatch import receiver
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     userCategory = models.CharField(max_length=20)
-    confereceCode = models.CharField(max_length=20)
+    conferenceCode = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
     
     @receiver(post_save, sender=User)

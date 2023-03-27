@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import UserProfile
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from .models import UserProfile
 
 # Create your views here.
 def home(request):
@@ -20,11 +21,11 @@ def signup(request):
         userCountry = request.POST['userCountry']
         conferenceCode = request.POST['conferenceCode']
         
-        if UserProfile.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists")
             return redirect('home')
         
-        if UserProfile.objects.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists")
             return redirect('home')
         
@@ -48,14 +49,18 @@ def signup(request):
             messages.error(request, "Conference code is invalid")
             return redirect('home')
         
-        myuser = UserProfile.objects.create_user(username, email, pass1)
+        myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
-        myuser.userCategory = userCategory
-        myuser.conferenceCode = conferenceCode
-        myuser.userCountry = userCountry
+        # myuser.userCategory = userCategory
+        # myuser.conferenceCode = conferenceCode
+        # myuser.userCountry = userCountry
         myuser.save() # save to database after updating fields
-        
+        profile = UserProfile.objects.get(user=myuser)
+        profile.userCategory = userCategory
+        profile.conferenceCode = conferenceCode
+        profile.userCountry = userCountry
+        profile.save()
         messages.success(request, "Your account has been successfully created")
         return redirect("signin")
     
