@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from .models import UserProfile
 
 # Create your views here.
 def home(request):
@@ -16,6 +17,9 @@ def signup(request):
         email = request.POST['email']
         pass1 = request.POST['pass1']
         pass2 = request.POST['pass2']
+        userCategory = request.POST['userCategory']
+        userCountry = request.POST['userCountry']
+        conferenceCode = request.POST['conferenceCode']
         
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists")
@@ -37,15 +41,26 @@ def signup(request):
             messages.error(request, "Username must be alphanumeric")
             return redirect('home')
         
+        if userCategory not in ['speaker', 'attendee']: # add more user categories here
+            messages.error(request, "User category must be speaker or attendee")
+            return redirect('home')
+        
+        if conferenceCode not in ['ICEASS2021', 'ICEASS2022', 'ICEASS2023']: # add more conference codes here
+            messages.error(request, "Conference code is invalid")
+            return redirect('home')
+        
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
+        # myuser.userCategory = userCategory
+        # myuser.conferenceCode = conferenceCode
+        # myuser.userCountry = userCountry
         myuser.save() # save to database after updating fields
-        
+        update_user_prfile(request, myuser)
         messages.success(request, "Your account has been successfully created")
         return redirect("signin")
     
-    return render(request, 'authentication/signup.html')
+    return render(request, 'authentication/sign-up.html')
 
 def signin(request):
     if request.method == 'POST':
@@ -62,9 +77,15 @@ def signin(request):
             messages.error(request, "Wrong username or password. Please try again")
             return redirect('home')
             
-    return render(request, 'authentication/signin.html')
+    return render(request, 'authentication/sign-in.html')
 
 def signout(request):
     logout(request)
     messages.success(request, "You have been successfully logged out")
     return redirect('home')
+
+def update_user_prfile(request, user):
+    user.userprofile.userCategory = request.POST['userCategory']
+    user.userprofile.conferenceCode = request.POST['conferenceCode']
+    user.userprofile.userCountry = request.POST['userCountry']
+    user.save()

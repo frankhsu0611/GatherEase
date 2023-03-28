@@ -46,25 +46,41 @@
                   <p class="mb-0">Create your account</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
+                  <form role="form" action="/signup/" method="post">
+                  {% csrf_token %}
                     <div class="mb-3">
-                      <input type="name" class="form-control form-control-lg" placeholder="Name" aria-label="Name">
+                      <input type="text" id="username" class="form-control form-control-lg" placeholder="UserName" aria-label="UserName">
                     </div>
                     <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
+                      <input type="text" id="fname" class="form-control form-control-lg" placeholder="First Name" aria-label="FirstName">
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                      <input type="text" id="lname" class="form-control form-control-lg" placeholder="Last Name" aria-label="LastName">
                     </div>
                     <div class="mb-3">
-                      <input type="eventcode" class="form-control form-control-lg" placeholder="Event Code" aria-label="Eventcode">
+                      <input type="email" id="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
                     </div>
-                    <div class="form-check form-switch">
+                    <div class="mb-3">
+                      <input type="password" id="pass1" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                    </div>
+                    <div class="mb-3">
+                      <input type="password" id="pass2" class="form-control form-control-lg" placeholder="Input Password Again" aria-label="Password 2">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" id="userCategory" class="form-control form-control-lg" placeholder="User Category" aria-label="userCategory">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" id="userCountry" class="form-control form-control-lg" placeholder="User Country" aria-label="userCountry">
+                    </div>
+                    <div class="mb-3">
+                      <input type="text" id="conferenceCode" class="form-control form-control-lg" placeholder="Conference Code" aria-label="conferenceCode">
+                    </div>
+                    <!-- <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe">
                       <label class="form-check-label" for="rememberMe">Remember me</label>
-                    </div>
+                    </div> -->
                     <div class="text-center">
-                      <button type="button" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign up</button>
+                      <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign up</button>
                     </div>
                   </form>
                 </div>
@@ -80,7 +96,7 @@
               <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('../assets/img/sign.jpg');
           background-size: cover;">
                 <span class="mask bg-gradient-primary opacity-3"></span>
-                <<h4 class="mt-5 text-white font-weight-bolder position-relative">"We make your event easy"</h4>
+                <h4 class="mt-5 text-white font-weight-bolder position-relative">"We make your event easy"</h4>
                 <p class="text-white position-relative">The more effortless the event looks, the more effort the planner actually put into the process.</p>
               </div>
             </div>
