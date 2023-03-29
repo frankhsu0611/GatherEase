@@ -58,7 +58,7 @@ def signup(request):
         myuser.save() # save to database after updating fields
         update_user_prfile(request, myuser)
         messages.success(request, "Your account has been successfully created")
-        return redirect("signin")
+        return redirect("sign-in")
     
     return render(request, 'authentication/sign-up.html')
 

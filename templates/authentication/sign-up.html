@@ -54,31 +54,31 @@
                   <form role="form" action="/signup/" method="post">
                   {% csrf_token %}
                     <div class="mb-3">
-                      <input type="text" id="username" class="form-control form-control-lg" placeholder="UserName" aria-label="UserName">
+                      <input type="text" id="username" name="username" class="form-control form-control-lg" placeholder="UserName" aria-label="UserName">
                     </div>
                     <div class="mb-3">
-                      <input type="text" id="fname" class="form-control form-control-lg" placeholder="First Name" aria-label="FirstName">
+                      <input type="text" id="fname" name="fname" class="form-control form-control-lg" placeholder="First Name" aria-label="FirstName">
                     </div>
                     <div class="mb-3">
-                      <input type="text" id="lname" class="form-control form-control-lg" placeholder="Last Name" aria-label="LastName">
+                      <input type="text" id="lname" name="lname" class="form-control form-control-lg" placeholder="Last Name" aria-label="LastName">
                     </div>
                     <div class="mb-3">
-                      <input type="email" id="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
+                      <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
                     </div>
                     <div class="mb-3">
-                      <input type="password" id="pass1" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                      <input type="password" id="pass1" name="pass1" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
                     </div>
                     <div class="mb-3">
-                      <input type="password" id="pass2" class="form-control form-control-lg" placeholder="Input Password Again" aria-label="Password 2">
+                      <input type="password" id="pass2" name="pass2" class="form-control form-control-lg" placeholder="Input Password Again" aria-label="Password 2">
                     </div>
                     <div class="mb-3">
-                      <input type="text" id="userCategory" class="form-control form-control-lg" placeholder="User Category" aria-label="userCategory">
+                      <input type="text" id="userCategory" name="userCategory" class="form-control form-control-lg" placeholder="User Category" aria-label="userCategory">
                     </div>
                     <div class="mb-3">
-                      <input type="text" id="userCountry" class="form-control form-control-lg" placeholder="User Country" aria-label="userCountry">
+                      <input type="text" id="userCountry" name="userCountry" class="form-control form-control-lg" placeholder="User Country" aria-label="userCountry">
                     </div>
                     <div class="mb-3">
-                      <input type="text" id="conferenceCode" class="form-control form-control-lg" placeholder="Conference Code" aria-label="conferenceCode">
+                      <input type="text" id="conferenceCode" name="conferenceCode" class="form-control form-control-lg" placeholder="Conference Code" aria-label="conferenceCode">
                     </div>
                     <!-- <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe">
@@ -88,6 +88,7 @@
                       <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign up</button>
                     </div>
                   </form>
+                  <script src="" async defer></script>
                 </div>
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                   <p class="mb-4 text-sm mx-auto">
