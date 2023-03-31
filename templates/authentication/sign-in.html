@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,14 +48,15 @@
                 </div>
                 <div class="card-body">
                   <form role="form"action="/signin/" method="post">
+                  {% csrf_token %}
                     <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email">
+                      <input type="text" id="username" name="username" class="form-control form-control-lg" placeholder="Username" aria-label="Username" required>
                     </div>
                     <div class="mb-3">
-                      <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password">
+                      <input type="password" id="pass1" name="pass1" class="form-control form-control-lg" placeholder="Password" aria-label="Password" required>
                     </div>
                     <div class="mb-3">
-                      <input type="eventcode" class="form-control form-control-lg" placeholder="Event Code" aria-label="Eventcode">
+                      <input type="text" id="eventCode" name="eventCode" class="form-control form-control-lg" placeholder="Event Code" aria-label="Eventcode" required>
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe">

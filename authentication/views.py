@@ -7,7 +7,7 @@ from .models import UserProfile
 
 # Create your views here.
 def home(request):
-    return render(request, 'authentication/index.html')
+    return render(request, 'authentication/index1.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -71,8 +71,8 @@ def signin(request):
         if user is not None:
             login(request, user)
             fname = user.first_name
-            print(fname)
-            return render(request, 'authentication/index.html', {'fname': fname})
+            #return render(request, 'authentication/index.html', {'fname': fname})
+            return redirect('home')
         else:
             messages.error(request, "Wrong username or password. Please try again")
             return redirect('home')
