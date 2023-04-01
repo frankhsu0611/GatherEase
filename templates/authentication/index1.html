@@ -45,7 +45,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" href="./index.html">
+          <a class="nav-link active" href="">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
             </div>
@@ -53,7 +53,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/agenda.html">
+          <a class="nav-link " href="/agenda/">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
@@ -61,7 +61,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/download.html">
+          <a class="nav-link " href="/download/">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
             </div>
@@ -73,15 +73,15 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./pages/profile.html">
+          <!-- <a class="nav-link " href="./pages/profile.html">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Profile</span>
-          </a>
+          </a> -->
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./authentication/sign-in.html">
+          <a class="nav-link " href="/signout/">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-collection text-info text-sm opacity-10"></i>
             </div>
@@ -146,7 +146,7 @@
                 <div class="col-4">
                   <div class="numbers">
                     <p class="text-xs font-weight-bold mb-0">NAME</p>
-                    <h6 class="text-sm mb-3">Sally Lan</h6>
+                    <h6 class="text-sm mb-3">{{ user.first_name }} {{ user.last_name }}</h6>
                   </div>
                 </div>
                 <div class="col-4"></div> <!-- Empty column -->
@@ -155,7 +155,7 @@
                 <div class="col-6">
                   <div class="numbers">
                     <p class="text-xs font-weight-bold mb-0">PROGRAM</p>
-                    <h6 class="text-sm mb-3">ICEASS</h6>
+                    <h6 class="text-sm mb-3">{{ user.userprofile.conferenceCode }}</h6>
                   </div>
                 </div>
                 <div class="col-6">
@@ -407,9 +407,67 @@
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="./static/js/argon-dashboard.min.js?v=2.0.4"></script>
 
+  <!-- Before Sign In HOME page -->
   {% else %}
-  <button type = "submit"><a href="/signin">SignIn</a></button>
-  <button type = "submit"><a href="/signup">SignUp</a></button>
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+    </div>
+  </div>
+  <main class="main-content  mt-0">
+    <section>
+      <div class="page-header min-vh-100">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+              <div class="card card-plain">
+                <div class="card-header pb-0 text-center">
+                  <div class="logo-container">
+                    <img src="../static/img/logo.png" alt="Logo" width="200" height="200">
+                  </div>
+                  <h4 class="font-weight-bolder">Welcome to GatherEase!</h4>
+                
+                  <div class="text-center">
+                    <a href="/signin" class="btn btn-lg btn-primary w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign In</a>
+                    <a href="/signup" class="btn btn-lg btn-primary w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign Up</a>
+                    <br>
+                    <br>
+                    <br>
+                  </div>
+                </div>
+              </div>
+            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+              <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('../static/img/sign.jpg');
+          background-size: cover;">
+                <span class="mask bg-gradient-primary opacity-3"></span>
+
+                <h4 class="mt-5 text-white font-weight-bolder position-relative">"We make your event easy"</h4>
+                <p class="text-white position-relative">The more effortless the event looks, the more effort the planner actually put into the process.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--   Core JS Files   -->
+  <script src="../static/js/core/popper.min.js"></script>
+  <script src="../static/js/core/bootstrap.min.js"></script>
+  <script src="../static/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../static/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../static/js/argon-dashboard.min.js?v=2.0.4"></script>
+  
   {% endif %}
 </body>
 

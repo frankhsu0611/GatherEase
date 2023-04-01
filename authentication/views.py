@@ -7,7 +7,9 @@ from .models import UserProfile
 
 # Create your views here.
 def home(request):
-    return render(request, 'authentication/index1.html')
+    user = request.user
+    context = {'user': user}
+    return render(request, 'authentication/index1.html', context)
 
 def signup(request):
     if request.method == 'POST':
@@ -75,7 +77,8 @@ def signin(request):
             return redirect('home')
         else:
             messages.error(request, "Wrong username or password. Please try again")
-            return redirect('home')
+            logout(request) # logout user if they are already logged in
+            return redirect('sign-in')
             
     return render(request, 'authentication/sign-in.html')
 
@@ -89,3 +92,9 @@ def update_user_prfile(request, user):
     user.userprofile.conferenceCode = request.POST['conferenceCode']
     user.userprofile.userCountry = request.POST['userCountry']
     user.save()
+
+def agenda(request):
+    return render(request, 'pages/agenda.html')
+
+def download(request):
+    return render(request, 'pages/download.html')
