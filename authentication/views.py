@@ -8,7 +8,7 @@ from .models import UserProfile
 # Create your views here.
 def home(request):
     user = request.user
-    context = {'user': user}
+    context = {'user': user} 
     return render(request, 'authentication/index1.html', context)
 
 def signup(request):
