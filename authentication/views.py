@@ -3,13 +3,17 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Conference
 
 # Create your views here.
 def home(request):
     user = request.user
-    context = {'user': user} 
-    return render(request, 'authentication/index1.html', context)
+    if user.is_authenticated:
+        userProfile = UserProfile.objects.get(user=user)
+        conference = userProfile.conference
+        context = {'userProfile': userProfile, 'conference': conference}
+        return render(request, 'authentication/index1.html', context)
+    return render(request, 'authentication/index.html')
 
 def signup(request):
     if request.method == 'POST':
@@ -86,7 +90,7 @@ def signout(request):
 
 def update_user_profile(request, user):
     user.userprofile.userCategory = request.POST['userCategory']
-    user.userprofile.conferenceCode = request.POST['conferenceCode']
+    user.userprofile.conferenceCode = Conference.objects.get(conferenceCode = request.POST['conferenceCode'])
     user.userprofile.userCountry = request.POST['userCountry']
     user.save()
 

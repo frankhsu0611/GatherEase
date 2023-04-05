@@ -33,14 +33,14 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     userCategory = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
-    conferenceCode = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile.objects.create(
                 user=instance, 
-                conferenceCode = Conference.objects.get(conferenceCode=CONFERENCE_CODE),
+                conference = Conference.objects.get(conferenceCode=CONFERENCE_CODE),
             )
 
     @receiver(post_save, sender=User)
