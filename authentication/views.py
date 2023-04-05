@@ -54,11 +54,8 @@ def signup(request):
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
-        # myuser.userCategory = userCategory
-        # myuser.conferenceCode = conferenceCode
-        # myuser.userCountry = userCountry
         myuser.save() # save to database after updating fields
-        update_user_prfile(request, myuser)
+        update_user_profile(request, myuser)
         messages.success(request, "Your account has been successfully created")
         return redirect("sign-in")
     
@@ -87,7 +84,7 @@ def signout(request):
     messages.success(request, "You have been successfully logged out")
     return redirect('home')
 
-def update_user_prfile(request, user):
+def update_user_profile(request, user):
     user.userprofile.userCategory = request.POST['userCategory']
     user.userprofile.conferenceCode = request.POST['conferenceCode']
     user.userprofile.userCountry = request.POST['userCountry']
