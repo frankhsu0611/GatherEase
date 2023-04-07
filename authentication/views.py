@@ -1,9 +1,12 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib import messages
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import UserProfile, Conference
+from .models import UserProfile, Conference, Event
+from .api_utils import get_events
+
 
 # Create your views here.
 def home(request):
@@ -11,9 +14,16 @@ def home(request):
     if user.is_authenticated:
         userProfile = UserProfile.objects.get(user=user)
         conference = userProfile.conference
-        context = {'userProfile': userProfile, 'conference': conference}
+        events_now, events_following = get_events(request)
+        context = {'userProfile': userProfile, 
+                   'conference': conference, 
+                   'events_now': events_now, 
+                   'events_following': events_following
+                   }
+        #print(user.id, context['events_now'])
         return render(request, 'authentication/index1.html', context)
     return render(request, 'authentication/index.html')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -90,7 +100,7 @@ def signout(request):
 
 def update_user_profile(request, user):
     user.userprofile.userCategory = request.POST['userCategory']
-    user.userprofile.conferenceCode = Conference.objects.get(conferenceCode = request.POST['conferenceCode'])
+    user.userprofile.conference = Conference.objects.get(conferenceCode = request.POST['conferenceCode'])
     user.userprofile.userCountry = request.POST['userCountry']
     user.save()
 

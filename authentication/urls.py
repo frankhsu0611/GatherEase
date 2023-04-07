@@ -9,5 +9,4 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('agenda/', views.agenda, name='agenda'),
     path('download/', views.download, name='download'),
-
     ]

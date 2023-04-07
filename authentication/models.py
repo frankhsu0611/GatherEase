@@ -9,8 +9,6 @@ CONFERENCE_START_DATE = '2023-06-11'
 CONFERENCE_END_DATE = '2023-06-16'
 CONFERENCE_CODE = 'ICEASS2021'
 
-
-        
 class Conference(models.Model):
     conferenceCode = models.CharField(max_length=20, primary_key=True)
     conferenceName = models.CharField(max_length=20, default='adminConference')
@@ -18,15 +16,16 @@ class Conference(models.Model):
     conferenceEndDate = models.DateField(default=CONFERENCE_END_DATE)
     conferenceLocation = models.CharField(max_length=20, default='adminLocation')
     conferenceType = models.CharField(max_length=20, default='adminType')
+    agendaURL = models.URLField(max_length=200, default='../static/upload/' + str(conferenceCode) + '/.pdf')
 
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)
     eventTheme = models.CharField(max_length=20)
-    eventTime = models.TimeField()
+    eventStartTime = models.TimeField()
+    eventEndTime = models.TimeField()
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     keynoteSpeaker = models.CharField(max_length=20)
     eventRoom = models.CharField(max_length=20)
-
-
 
 
 class UserProfile(models.Model):

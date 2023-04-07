@@ -16,6 +16,7 @@ conference_start_date = timezone.datetime(2023, 6, 11).date()
 conference_end_date = timezone.datetime(2023, 6, 16).date()
 conference_type = 'adminConferenceType'
 conference_location = 'adminConferenceLocation'
+agendaURL = '../static/upload/' + str(conference_code) + '/.pdf'
 
 # Create a new Conference instance
 conference = Conference(
