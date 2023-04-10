@@ -21,8 +21,8 @@ class Conference(models.Model):
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)
     eventTheme = models.CharField(max_length=20)
-    eventStartTime = models.TimeField()
-    eventEndTime = models.TimeField()
+    eventStartTime = models.DateTimeField()
+    eventEndTime = models.DateTimeField()
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     keynoteSpeaker = models.CharField(max_length=20)
     eventRoom = models.CharField(max_length=20)

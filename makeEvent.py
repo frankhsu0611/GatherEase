@@ -10,16 +10,19 @@ from django.utils import timezone
 from authentication.models import Event
 from authentication.models import Conference
 from datetime import datetime
-from dateutil import tz
 import pytz
 
-eventCode = "EVENT101"
+eventCode = "EVENT102"
 eventTheme = 'adminEventTheme'
 conference = Conference.objects.get(conferenceCode = 'ICEASS2021')
 keynoteSpeaker = "adminKeynoteSpeaker"
 eventRoom = "adminEventRoom"
-eventStartTime = datetime(2023, 4, 4, 15, 0)
-eventEndTime = datetime(2023, 4, 20, 20, 0)
+
+# choose local timezone to deploy
+local_timezone = pytz.timezone('America/Los_Angeles')
+eventStartTime = timezone.datetime(2023, 4, 15, 16, 12, 30, tzinfo=local_timezone)
+eventEndTime = timezone.datetime(2023, 4, 20, 20, 18, 30, tzinfo=local_timezone)
+
 
 event = Event(eventCode = eventCode, 
               eventTheme = eventTheme, 
