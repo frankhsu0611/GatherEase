@@ -14,9 +14,10 @@ class Conference(models.Model):
     conferenceName = models.CharField(max_length=20, default='adminConference')
     conferenceStartDate = models.DateField(default=CONFERENCE_START_DATE)
     conferenceEndDate = models.DateField(default=CONFERENCE_END_DATE)
-    conferenceLocation = models.CharField(max_length=20, default='adminLocation')
+    conferenceLocation = models.CharField(max_length=30, default='adminLocation')
     conferenceType = models.CharField(max_length=20, default='adminType')
-    agendaURL = models.URLField(max_length=200, default='../static/upload/' + str(conferenceCode) + '/.pdf')
+    agenda = models.FileField(upload_to='documents/')  # Specify the sub-directory within 'media' folder.
+
 
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)

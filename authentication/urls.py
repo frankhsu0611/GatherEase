@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -10,3 +10,4 @@ urlpatterns = [
     path('agenda/', views.agenda, name='agenda'),
     path('download/', views.download, name='download'),
     ]
+

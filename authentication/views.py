@@ -6,7 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event
 from .api_utils import get_events
-
+from django.shortcuts import get_object_or_404
+from django.template.loader import get_template
+from django.template import Context
+from xhtml2pdf import pisa
 
 # Create your views here.
 def home(request):
@@ -98,14 +101,30 @@ def signout(request):
     messages.success(request, "You have been successfully logged out")
     return redirect('home')
 
+#write a function to show agenda page and pass a http response that contains the agenda.pdf stored in media/ducoment folder
+
+def agenda(request):
+    user = request.user
+    userProfile = UserProfile.objects.get(user=user)
+    conference = userProfile.conference
+    return render(request, 'pages/agenda.html', {'conference': conference})
+
+
+
+
+
+
+
+
+
+
+
 def update_user_profile(request, user):
     user.userprofile.userCategory = request.POST['userCategory']
     user.userprofile.conference = Conference.objects.get(conferenceCode = request.POST['conferenceCode'])
     user.userprofile.userCountry = request.POST['userCountry']
     user.save()
 
-def agenda(request):
-    return render(request, 'pages/agenda.html')
 
 def download(request):
     return render(request, 'pages/download.html')

@@ -20,6 +20,4 @@ def get_events(request):
     return None
 
 
-def get_agenda(request):
-    conference = request.user.userprofile.conference
     
