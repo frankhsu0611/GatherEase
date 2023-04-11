@@ -120,69 +120,62 @@
       <div class="row">
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
-            <div class="card-body p-3">
-              <div class="row">
-                <div class="col-8">
-                  <div class="numbers">
-                    <p class="text-sm mb-0 text-uppercase font-weight-bold">ID Number</p>
-                    <h5 class="font-weight-bolder">
-                      PJQI 2587
-                    </h5>
+              <div class="card-body p-3">
+                  <div class="row">
+                      <div class="col-8">
+                          <div class="numbers">
+                              <p class="text-sm mb-0 text-uppercase font-weight-bold">ID Number</p>
+                              <h5 class="font-weight-bolder">
+                                  {{ user.username }}
+                              </h5>
+                          </div>
+                      </div>
+                      <div class="col-4 text-end">
+                          <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
+                              <img src="./static/img/ticket.png" alt="ticket flag" style="width: 60px; height: 60px; margin-right: 8px;">
+                          </div>
+                      </div>
                   </div>
-                </div>
-                <div class="col-4 text-end">
-                  <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
               </div>
-            </div>
           </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-          <div class="card">
-            <div class="card-body p-3">
-              <div class="row">
-                <div class="col-4">
-                  <div class="numbers">
-                    <p class="text-xs font-weight-bold mb-0">NAME</p>
-                    <h6 class="text-sm mb-3">{{ user.first_name }} {{ user.last_name }}</h6>
-                  </div>
-                </div>
-                <div class="col-4"></div> <!-- Empty column -->
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="numbers">
-                    <p class="text-xs font-weight-bold mb-0">PROGRAM</p>
-                    <h6 class="text-sm mb-3">{{ user.userprofile.conferenceCode }}</h6>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="numbers">
-                    <p class="text-xs font-weight-bold mb-0">THEME</p>
-                    <h6 class="text-sm mb-3">Education</h6>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <div class="numbers">
-                    <p class="text-xs font-weight-bold mb-0">TIME</p>
-                    <h6 class="text-sm mb-3">28 June - 30 June</h6>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="numbers">
-                    <p class="text-xs font-weight-bold mb-0">LOCATION</p>
-                    <h6 class="text-sm mb-3">Taipie Hotel</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
+      
           </div>
-        </div>
+          <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+              <div class="card">
+                  <div class="card-body p-3">
+                      <div class="row">
+                          <div class="col-6">
+                              <div class="numbers">
+                                  <p class="text-xs font-weight-bold mb-0">NAME</p>
+                                  <h6 class="text-sm mb-3">{{ user.first_name }} {{ user.last_name }}</h6>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                              <div class="numbers">
+                                  <p class="text-xs font-weight-bold mb-0">PROGRAM</p>
+                                  <h6 class="text-sm mb-3">{{ user.userprofile.conference.conferenceCode }}</h6>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-6">
+                              <div class="numbers">
+                                  <p class="text-xs font-weight-bold mb-0">TIME</p>
+                                  <h6 class="text-sm mb-3">{{ user.userprofile.conference.conferenceStartDate }} - {{ user.userprofile.conference.conferenceEndDate }}</h6>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                              <div class="numbers">
+                                  <p class="text-xs font-weight-bold mb-0">LOCATION</p>
+                                  <h6 class="text-sm mb-3">{{ user.userprofile.conference.conferenceLocation }}</h6>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
+  
       
       <div class="row mt-4">
         <div class="col-lg-7 mb-lg-0 mb-4">
@@ -192,16 +185,71 @@
                 <h6 class="mb-2">Events</h6>
               </div>
             </div>
-            <div class="table-responsive">
-              <table class="table align-items-center">
-                <tbody id="event-table">
-                  <!-- Dynamic event rows will be added here -->
-                </tbody>
-              </table>
+            <div class="card-body">
+              {% for event in events_now %}
+              <div class="row mb-3" style="background-color: #d1e9f3; border-radius: 8px; padding: 10px;  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <!-- purple #cfd5f7 -->
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/topic.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventTheme }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/time1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/speaker.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.keynoteSpeaker }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/room1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventRoom }}</h6>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+
+      
+              {% for event in events_following %}
+              <div class="row mb-3" style="padding: 10px;">
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/topic.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventTheme }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/time1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/speaker.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.keynoteSpeaker }}</h6>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div style="display: flex; align-items: center;">
+                    <img src="./static/img/icons/event/room1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <h6 class="text-sm mb-0">{{ event.eventRoom }}</h6>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
       </div>
+      
 
       <footer class="footer pt-3  ">
         <div class="container-fluid">
