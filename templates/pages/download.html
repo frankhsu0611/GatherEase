@@ -345,6 +345,17 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../static/js/argon-dashboard.min.js?v=2.0.4"></script>
+
+
+<!-- download button -->
+{% block content %}
+  <h1>{{ conference.conferenceName }}</h1>
+  <p>{{ conference.conferenceLocation }}</p>
+  <form action="{% url 'download_proceedings' %}" method="get">
+    {% csrf_token %}
+    <button type="submit">Download Proceedings</button>
+  </form>
+{% endblock %}
 </body>
 
 </html>

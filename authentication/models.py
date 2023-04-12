@@ -16,7 +16,8 @@ class Conference(models.Model):
     conferenceEndDate = models.DateField(default=CONFERENCE_END_DATE)
     conferenceLocation = models.CharField(max_length=30, default='adminLocation')
     conferenceType = models.CharField(max_length=20, default='adminType')
-    agenda = models.FileField(upload_to='documents/')  # Specify the sub-directory within 'media' folder.
+    agenda = models.FileField(upload_to='agenda/')  # Specify the sub-directory within 'media' folder.
+    proceedings = models.FileField(upload_to='proceedings/')  # Specify the sub-directory within 'media' folder.
 
 
 class Event(models.Model):

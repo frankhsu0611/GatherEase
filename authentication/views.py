@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
@@ -125,6 +125,20 @@ def update_user_profile(request, user):
     user.userprofile.userCountry = request.POST['userCountry']
     user.save()
 
+def download_proceedings(request):
+    user = request.user
+    if user.is_authenticated:
+        userProfile = UserProfile.objects.get(user=user)
+        conference = userProfile.conference
+        proceedings = conference.proceedings
+        return FileResponse(proceedings, as_attachment=True)
+    return redirect('sign-in')
+
 
 def download(request):
-    return render(request, 'pages/download.html')
+    user = request.user
+    if user.is_authenticated:
+        userProfile = UserProfile.objects.get(user=user)
+        conference = userProfile.conference
+        return render(request, 'pages/download.html', {'conference': conference})
+    return redirect('sign-in')
