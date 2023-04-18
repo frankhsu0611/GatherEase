@@ -1,0 +1,73 @@
+<!-- This is where you should add the content and functionality of your 
+    custom dashboard, such as charts, tables, or any other information 
+    you want to display on your dashboard. -->
+
+    {% extends "admin/base_site.html" %}
+
+    {% load static %}
+    
+    
+    {% block extrahead %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% endblock %}
+    
+    {% block content %}
+        <h1>Custom Admin Homepage Dashboard</h1>
+        
+        {% for data in chart_data %}
+            <h2>{{ data.conference }}</h2>
+            <canvas id="chart-{{ forloop.counter }}" width="10" height="10"></canvas>
+        {% endfor %}
+    
+        <script>
+            const chartData = {{ chart_data|safe }};
+            
+            chartData.forEach((data, index) => {
+                const ctx = document.getElementById(`chart-${index + 1}`).getContext('2d');
+    
+                const totalUsers = data.country_count.reduce((sum, item) => sum + item.count, 0);
+    
+                const chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: data.country_count.map(item => item.userCountry),
+                        datasets: [{
+                            data: data.country_count.map(item => item.count),
+                            backgroundColor: [
+                                // Add colors for the chart segments (one for each country)
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                            ],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw;
+                                        const percentage = ((value / totalUsers) * 100).toFixed(2);
+                                        return `${label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            },
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Demographics by Country'
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
+    

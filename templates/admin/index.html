@@ -1,0 +1,13 @@
+<!--This is used to extend the default Django admin index 
+    page and add a link to your custom dashboard 
+    without overriding the rest of the admin site. -->
+
+{% extends "admin/index.html" %}
+
+{% load custom_admin_tags %}
+
+{% block content %}
+    {{ block.super }}
+    <h2>Custom Dashboard</h2>
+    <p><a href="{% custom_dashboard_url %}">Go to the custom dashboard</a></p>
+{% endblock %}

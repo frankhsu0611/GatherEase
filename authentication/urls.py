@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from django.urls import path, include
+
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -9,5 +11,4 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('agenda/', views.agenda, name='agenda'),
     path('download/', views.download, name='download'),
-    ]
-
+]
