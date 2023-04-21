@@ -11,6 +11,6 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('agenda/', views.agenda, name='agenda'),
     path('download/', views.download, name='download'),
-    path('/proceedings/download', views.download_proceedings,
+    path('proceedings/download', views.download_proceedings,
          name='download_proceedings'),
 ]

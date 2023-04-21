@@ -1,0 +1,11 @@
+<!-- custom_admin_dashboard/templates/admin/upload_event_file.html -->
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+  <h1>Upload Event File</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+  </form>
+{% endblock %}

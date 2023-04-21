@@ -1,0 +1,11 @@
+<!-- custom_admin_dashboard/templates/admin/events_change_list.html -->
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'admin:upload_event_file' %}" class="addlink">
+            Upload Event File
+        </a>
+    </li>
+    {{ block.super }}
+{% endblock %}

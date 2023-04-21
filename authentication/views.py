@@ -8,7 +8,6 @@ from .models import UserProfile, Conference, Event
 from .api_utils import get_events
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
-from django.template import Context
 
 # Create your views here.
 

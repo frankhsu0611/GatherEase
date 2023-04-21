@@ -5,4 +5,4 @@ from .models import UserProfile, Conference, Event
 
 admin.site.register(UserProfile)
 admin.site.register(Conference)
-admin.site.register(Event)
+#admin.site.register(Event)
