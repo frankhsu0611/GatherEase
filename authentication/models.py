@@ -22,6 +22,7 @@ class Conference(models.Model):
     agenda = models.FileField(upload_to='agenda/')
     # Specify the sub-directory within 'media' folder.
     proceedings = models.FileField(upload_to='proceedings/')
+    #TO DO: add program
 
 
 class Event(models.Model):
@@ -33,13 +34,22 @@ class Event(models.Model):
     keynoteSpeaker = models.CharField(max_length=20)
     eventRoom = models.CharField(max_length=20)
 
+class Paper(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    paperID = models.CharField(max_length=20, primary_key=True)
+    paperTitle = models.CharField(max_length=50)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
     userCategory = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
+    userUniversity = models.CharField(max_length=40)
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    
+    
+    class Meta:
+        verbose_name_plural = "UserProfiles"
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

@@ -38,6 +38,7 @@ def signup(request):
         pass2 = request.POST['pass2']
         userCategory = request.POST['userCategory']
         userCountry = request.POST['userCountry']
+        userUniversity = request.POST['userUniversity']
         conferenceCode = request.POST['conferenceCode']
 
         if User.objects.filter(username=username).exists():
@@ -74,8 +75,11 @@ def signup(request):
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
-        myuser.save()  # save to database after updating fields
-        update_user_profile(request, myuser)
+        myuser.userprofile.userCategory = userCategory
+        myuser.userprofile.conference = Conference.objects.get(conferenceCode=request.POST['conferenceCode'])
+        myuser.userprofile.userCountry = userCountry
+        myuser.userprofile.userUniversity = userUniversity
+        myuser.save()
         messages.success(request, "Your account has been successfully created")
         return redirect("sign-in")
 
@@ -117,12 +121,7 @@ def agenda(request):
     return render(request, 'pages/agenda.html', {'conference': conference})
 
 
-def update_user_profile(request, user):
-    user.userprofile.userCategory = request.POST['userCategory']
-    user.userprofile.conference = Conference.objects.get(
-        conferenceCode=request.POST['conferenceCode'])
-    user.userprofile.userCountry = request.POST['userCountry']
-    user.save()
+    
 
 def download_proceedings(request):
     user = request.user
