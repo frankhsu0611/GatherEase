@@ -121,18 +121,6 @@ def agenda(request):
     return render(request, 'pages/agenda.html', {'conference': conference})
 
 
-    
-
-def download_proceedings(request):
-    user = request.user
-    if user.is_authenticated:
-        userProfile = UserProfile.objects.get(user=user)
-        conference = userProfile.conference
-        proceedings = conference.proceedings
-        return FileResponse(proceedings, as_attachment=True)
-    return redirect('sign-in')
-
-
 def download(request):
     user = request.user
     if user.is_authenticated:

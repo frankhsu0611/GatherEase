@@ -23,6 +23,7 @@ class Conference(models.Model):
     # Specify the sub-directory within 'media' folder.
     proceedings = models.FileField(upload_to='proceedings/')
     #TO DO: add program
+    program = models.FileField(upload_to='program/')
 
 
 class Event(models.Model):
