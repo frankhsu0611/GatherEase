@@ -76,7 +76,8 @@ def signup(request):
         myuser.first_name = fname
         myuser.last_name = lname
         myuser.userprofile.userCategory = userCategory
-        myuser.userprofile.conference = Conference.objects.get(conferenceCode=request.POST['conferenceCode'])
+        myuser.userprofile.conference = Conference.objects.get(
+            conferenceCode=request.POST['conferenceCode'])
         myuser.userprofile.userCountry = userCountry
         myuser.userprofile.userUniversity = userUniversity
         myuser.save()
@@ -128,3 +129,7 @@ def download(request):
         conference = userProfile.conference
         return render(request, 'pages/download.html', {'conference': conference})
     return redirect('sign-in')
+
+
+def certificate(request):
+    return render(request, 'certificate.html')

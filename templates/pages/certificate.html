@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Document Title</title>
+  <style>
+    /* Add your CSS styles here */
+
+    body {
+    /* Set the background image */
+    background-image: url('../img/certificateBK.jpg');
+
+    /* Set the background size to cover the entire page */
+    background-size: cover;
+
+    /* Center the background image */
+    background-position: center center;
+
+    /* Prevent the background image from repeating */
+    background-repeat: no-repeat;
+
+    /* Set the page size to A4 landscape and add margins for printing */
+    width: 297mm;
+    height: 210mm;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+
+    /* Configure your preferred font family and other styles */
+    font-family: Arial, sans-serif;
+    color: black;
+    }
+
+    /* Print-specific styles */
+    @media print {
+      body {
+        /* Set the print margins to 0 */
+        margin: 0;
+
+        /* Set the print background color */
+        -webkit-print-color-adjust: exact;
+      }
+
+      /* Set the print orientation to landscape */
+      @page {
+        size: A4 landscape;
+      }
+    }
+
+  </style>
+</head>
+<body>
+    <div class="certificate-content">
+      <!-- Add your certificate content here -->
+      <h1>Certificate of Achievement</h1>
+      <p>This is to certify that...</p>
+      <!-- ... -->
+    </div>
+  </body>
+</html>

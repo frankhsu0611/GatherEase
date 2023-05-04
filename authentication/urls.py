@@ -15,4 +15,5 @@ urlpatterns = [
          name='download_proceedings'),
     path('program/download', api_utils.download_program,
          name='download_program'),
+    path('certificate/', views.certificate, name='certificate'),
 ]
