@@ -132,4 +132,4 @@ def download(request):
 
 
 def certificate(request):
-    return render(request, 'certificate.html')
+    return render(request, 'pages/certificate.html')
