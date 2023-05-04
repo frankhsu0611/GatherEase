@@ -9,28 +9,57 @@
     /* Add your CSS styles here */
 
     body {
-    /* Set the background image */
-    background-image: url('../img/certificateBK.jpg');
+      /* Set the page size to A4 landscape and add margins for printing */
+      width: 297mm;
+      height: 210mm;
+      margin: 0 auto;
+      position: relative;
+      box-sizing: border-box;
 
-    /* Set the background size to cover the entire page */
-    background-size: cover;
+      /* Configure your preferred font family and other styles */
+      font-family: Georgia, sans-serif;
+      color: black;
+    }
 
-    /* Center the background image */
-    background-position: center center;
+    #background-image {
+      /* Set the image to cover the entire page */
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
 
-    /* Prevent the background image from repeating */
-    background-repeat: no-repeat;
+      /* Position the image at the bottom layer */
+      position: absolute;
+      z-index: -1;
+    }
 
-    /* Set the page size to A4 landscape and add margins for printing */
-    width: 297mm;
-    height: 210mm;
-    margin: 0 auto;
-    position: relative;
-    box-sizing: border-box;
+    .certificate-content {
+      /* Position the content in the center and middle of the page */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 100%;
+    }
+    .conference-name,
+    .conference-details {
+      font-size: 20px;
+    }
 
-    /* Configure your preferred font family and other styles */
-    font-family: Arial, sans-serif;
-    color: black;
+    .affiliation {
+      font-size: 20px;
+    }
+
+    .name {
+      font-size: 24px;
+      text-decoration: underline;
+    }
+
+    .paper-title {
+      font-family: Cambria, serif;
+      font-size: 20px;
+      font-style: italic;
+      text-decoration: underline;
     }
 
     /* Print-specific styles */
@@ -38,9 +67,6 @@
       body {
         /* Set the print margins to 0 */
         margin: 0;
-
-        /* Set the print background color */
-        -webkit-print-color-adjust: exact;
       }
 
       /* Set the print orientation to landscape */
@@ -49,14 +75,19 @@
       }
     }
 
+
   </style>
 </head>
 <body>
-    <div class="certificate-content">
-      <!-- Add your certificate content here -->
-      <h1>Certificate of Achievement</h1>
-      <p>This is to certify that...</p>
-      <!-- ... -->
-    </div>
+  <img id="background-image" src="../static/img/certificateBK.jpg" alt="Certificate Background">
+  <div class="certificate-content">
+    <!-- Add your certificate content here -->
+    <h1 class="conference-name">{{ user_profile.conference.conferenceName }}</h1>
+    <h2 class="conference-details">{{ user_profile.conference.conferenceStartDate }} - {{ user_profile.conference.conferenceEndDate }}, {{ user_profile.conference.conferenceLocation }}</h2>
+    <h3 class="affiliation">{{ user_profile.userUniversity }}</h3>
+    <h4 class="name">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h4>
+    <h5 class="paper-title">Paper Title</h5>
+    <!-- ... -->
+  </div>
   </body>
 </html>
