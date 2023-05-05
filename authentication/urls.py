@@ -11,9 +11,8 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('agenda/', views.agenda, name='agenda'),
     path('download/', views.download, name='download'),
-    path('proceedings/download', api_utils.download_proceedings,
-         name='download_proceedings'),
-    path('program/download', api_utils.download_program,
-         name='download_program'),
+    path('proceedings/download', api_utils.download_proceedings, name='download_proceedings'),
+    path('program/download', api_utils.download_program, name='download_program'),
+    path('certificate/download', api_utils.dowload_certificate, name='dowload_certificate'),
     path('certificate/', views.certificate, name='certificate'),
 ]

@@ -135,11 +135,11 @@ def certificate(request):
     if request.user.is_authenticated:
         user = request.user
         user_profile = UserProfile.objects.get(user=user)
-        # paper = Paper.objects.get(user=user)
+        paper = Paper.objects.get(user=user)
 
         context = {
             'user_profile': user_profile,
-            # 'paper': paper,
+            'paper': paper,
         }
 
         return render(request, 'pages/certificate.html', context)
