@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import UserProfile, Conference, Event
+from .models import UserProfile, Conference, Event, Paper
 from .api_utils import get_events
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
@@ -132,4 +132,4 @@ def download(request):
 
 
 def certificate(request):
-    return render(request, 'pages/certificate.html')
+    return render(request, 'certificate.html')
