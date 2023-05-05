@@ -132,4 +132,17 @@ def download(request):
 
 
 def certificate(request):
-    return render(request, 'certificate.html')
+    if request.user.is_authenticated:
+        user = request.user
+        user_profile = UserProfile.objects.get(user=user)
+        # paper = Paper.objects.get(user=user)
+
+        context = {
+            'user_profile': user_profile,
+            # 'paper': paper,
+        }
+
+        return render(request, 'pages/certificate.html', context)
+    else:
+        messages.error(request, "Please log in to view your certificate.")
+        return redirect('sign-in')
