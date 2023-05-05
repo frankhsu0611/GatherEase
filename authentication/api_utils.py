@@ -1,10 +1,15 @@
 import io
+import pytz
+import base64
+import pikepdf
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect
-from .models import UserProfile, Conference, Event
+from .models import UserProfile, Conference, Event, Paper
 from datetime import datetime
-import pytz
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.core.files.base import ContentFile
 
 def get_events(request):    
     user = request.user
@@ -41,39 +46,59 @@ def download_program(request):
         return FileResponse(program, as_attachment=True)
     
 
-
-from xhtml2pdf import pisa
-from django.template.loader import get_template
-
-
-
 def dowload_certificate(request):
-    context = {
-        "userProfile": UserProfile.objects.get(user=request.user),
-    }
+    if request.user.is_authenticated:
+        paper = Paper.objects.get(user=request.user)
+        context = {
+            "userProfile": UserProfile.objects.get(user=request.user),
+            "paper": paper,
+            "background_image_data_uri": get_image_data_uri("static/img/certificateBK.jpg"),
+        }
+        pdf = render_html_to_pdf('pages/certificate.html', context)
 
-    pdf = render_to_pdf('pages/certificate.html', context)
+        if pdf is None:
+            return HttpResponse("An error occurred while generating the PDF. Please check the server logs for more information.")
 
-    if pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        filename = "Invoice_%s.pdf" %("12341231")
-        content = "attachment; filename='%s'" %(filename)
-        response['Content-Disposition'] = content
+        pdf_content = pdf.getvalue()
+        response = HttpResponse(pdf_content, content_type='application/pdf')
+        filename = "certificate.pdf"
+        response['Content-Disposition'] = f"attachment; filename={filename}"
         return response
-    return HttpResponse("Not found")
+    return redirect('sign-in')
 
 
 
-def render_to_pdf(template_src, context={}):
+from weasyprint import HTML
+def render_html_to_pdf(template_src, context={}):
     template = get_template(template_src)
     html = template.render(context)
     result = io.BytesIO()
 
-    info = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), result)
+    HTML(string=html).write_pdf(result)
 
-    if not info.err:
-        return FileResponse(result.getvalue(), content_type='application/pdf')
+    return result
 
-    return None
+
+def get_image_data_uri(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    return f"data:image/jpeg;base64,{encoded_string.decode('utf-8')}"
+
+
+def merge_pdfs(pdfs):
+    merged_pdf = pikepdf.Pdf.new()
+
+    for pdf in pdfs:
+        pdf_bytes = pdf.getvalue()
+        src_pdf = pikepdf.Pdf.open(pdf_bytes)
+        
+        # Append all pages from the source PDF to the merged PDF
+        for page in src_pdf.pages:
+            merged_pdf.pages.append(page)
+
+    merged_pdf_buffer = io.BytesIO()
+    merged_pdf.save(merged_pdf_buffer)
+
+    return merged_pdf_buffer
 
 

@@ -19,19 +19,14 @@
       /* Configure your preferred font family and other styles */
       font-family: Georgia, sans-serif;
       color: black;
+
+      /* Set the background image and its properties */
+      background-image: url("{{ background_image_data_uri }}");
+      background-size: contain;
+      background-position: center center;
+      background-repeat: no-repeat;
     }
-
-    #background-image {
-      /* Set the image to cover the entire page */
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-
-      /* Position the image at the bottom layer */
-      position: absolute;
-      z-index: -1;
-    }
-
+  
     .certificate-content {
       /* Position the content in the center and middle of the page */
       position: absolute;
@@ -39,7 +34,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      width: 100%;
+      width: 90%;
     }
     .conference-name,
     .conference-details {
@@ -74,12 +69,10 @@
         size: A4 landscape;
       }
     }
-
-
   </style>
 </head>
 <body>
-  <img id="background-image" src="../static/img/certificateBK.jpg" alt="Certificate Background">
+  {% comment %} <img id="background-image" src="{{ background_image_data_uri }}" alt="Certificate Background"> {% endcomment %}
   <div class="certificate-content">
     <!-- Add your certificate content here -->
     <h1 class="conference-name">{{ user_profile.conference.conferenceName }}</h1>
