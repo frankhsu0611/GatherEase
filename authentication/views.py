@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper
-from .api_utils import get_events
+from .api_utils import get_events, get_image_data_uri
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 
@@ -140,6 +140,7 @@ def certificate(request):
         context = {
             'user_profile': user_profile,
             'paper': paper,
+            "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
         }
 
         return render(request, 'pages/certificate.html', context)

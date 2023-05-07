@@ -53,7 +53,7 @@ def dowload_certificate(request):
     if request.user.is_authenticated:
         paper = Paper.objects.get(user=request.user)
         context = {
-            "userProfile": UserProfile.objects.get(user=request.user),
+            "user_profile": UserProfile.objects.get(user=request.user),
             "paper": paper,
             "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
         }
