@@ -1,3 +1,4 @@
+from weasyprint import HTML
 import io
 import pytz
 import base64
@@ -11,18 +12,19 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.core.files.base import ContentFile
 
-def get_events(request):    
+
+def get_events(request):
     user = request.user
     if user.is_authenticated:
         local_timezone = pytz.timezone('America/Los_Angeles')
-        now = datetime.now(local_timezone) #UTC time
-        events_now = Event.objects.filter(conference = UserProfile.objects.get(user=user).conference,
-                                    eventStartTime__lte = now,
-                                    eventEndTime__gte = now,
-                                    ).order_by('eventStartTime')
-        events_following = Event.objects.filter(conference = UserProfile.objects.get(user=user).conference,
-                                    eventStartTime__gte = now,
-                                    ).order_by('eventStartTime')
+        now = datetime.now(local_timezone)  # UTC time
+        events_now = Event.objects.filter(conference=UserProfile.objects.get(user=user).conference,
+                                          eventStartTime__lte=now,
+                                          eventEndTime__gte=now,
+                                          ).order_by('eventStartTime')
+        events_following = Event.objects.filter(conference=UserProfile.objects.get(user=user).conference,
+                                                eventStartTime__gte=now,
+                                                ).order_by('eventStartTime')
         print(events_following)
         return (events_now, events_following)
     return None
@@ -37,6 +39,7 @@ def download_proceedings(request):
         return FileResponse(proceedings, as_attachment=True)
     return redirect('sign-in')
 
+
 def download_program(request):
     user = request.user
     if user.is_authenticated:
@@ -44,7 +47,7 @@ def download_program(request):
         conference = userProfile.conference
         program = conference.program
         return FileResponse(program, as_attachment=True)
-    
+
 
 def dowload_certificate(request):
     if request.user.is_authenticated:
@@ -52,7 +55,7 @@ def dowload_certificate(request):
         context = {
             "userProfile": UserProfile.objects.get(user=request.user),
             "paper": paper,
-            "background_image_data_uri": get_image_data_uri("static/img/certificateBK.jpg"),
+            "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
         }
         pdf = render_html_to_pdf('pages/certificate.html', context)
 
@@ -67,8 +70,6 @@ def dowload_certificate(request):
     return redirect('sign-in')
 
 
-
-from weasyprint import HTML
 def render_html_to_pdf(template_src, context={}):
     template = get_template(template_src)
     html = template.render(context)
@@ -91,7 +92,7 @@ def merge_pdfs(pdfs):
     for pdf in pdfs:
         pdf_bytes = pdf.getvalue()
         src_pdf = pikepdf.Pdf.open(pdf_bytes)
-        
+
         # Append all pages from the source PDF to the merged PDF
         for page in src_pdf.pages:
             merged_pdf.pages.append(page)
@@ -100,5 +101,3 @@ def merge_pdfs(pdfs):
     merged_pdf.save(merged_pdf_buffer)
 
     return merged_pdf_buffer
-
-

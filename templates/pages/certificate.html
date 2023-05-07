@@ -19,42 +19,69 @@
       /* Configure your preferred font family and other styles */
       font-family: Georgia, sans-serif;
       color: black;
+    }
 
+    #background-image {
+      /* Set the image to cover the entire page */
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+
+      /* Position the image at the bottom layer */
+      position: absolute;
+      z-index: -1;
       /* Set the background image and its properties */
       background-image: url("{{ background_image_data_uri }}");
       background-size: contain;
       background-position: center center;
       background-repeat: no-repeat;
     }
+
+    .title {
+      font-family: Times New Roman;
+      font-size: 50px;
+    }
   
     .certificate-content {
       /* Position the content in the center and middle of the page */
       position: absolute;
-      top: 50%;
+      top: 45%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
       width: 90%;
+
     }
     .conference-name,
     .conference-details {
-      font-size: 20px;
+      font-size: 25px;
     }
 
     .affiliation {
-      font-size: 20px;
+      font-size: 25px;
     }
 
     .name {
-      font-size: 24px;
+      font-size: 25px;
       text-decoration: underline;
+    }
+
+    .attend {
+      font-size: 15px;
+      font-style: italic;
+      margin-bottom: 5px; /* Adjust this value to change the gap between the lines */
     }
 
     .paper-title {
       font-family: Cambria, serif;
-      font-size: 20px;
+      font-size: 24px;
       font-style: italic;
       text-decoration: underline;
+      /* Add these lines */
+      margin-top: 0; /* Remove the default margin from the top */
+      width: 90%;
+      margin: 0 auto;
+      word-wrap: break-word;
     }
 
     /* Print-specific styles */
@@ -72,15 +99,25 @@
   </style>
 </head>
 <body>
-  {% comment %} <img id="background-image" src="{{ background_image_data_uri }}" alt="Certificate Background"> {% endcomment %}
+  <img id="background-image" src="../static/img/certificate1.jpg" alt="Certificate Background">
   <div class="certificate-content">
     <!-- Add your certificate content here -->
+    <h1 class="title">Certificate of Presentation</h1>
+    <h1 class="conference-name">{{ user_profile.conference.conferenceName }}</h1>
+    <h2 class="conference-details">{{ user_profile.conference.conferenceStartDate|date:"F j" }}-{{ user_profile.conference.conferenceEndDate|date:"j, Y" }} {{ user_profile.conference.conferenceLocation }}</h2>
+    <h3 class="affiliation">{{ user_profile.userUniversity }}</h3>
+    <h4 class="name">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h4>
+    <h5 class="attend"> Has attended the conference and presented a paper entitled</h5>
+    <h5 class="paper-title"> {{ paper.paperTitle }}</h5>
+    <!-- ... -->
+
+    <!-- <h1 class="title">Certificate of Presentation</h1>
     <h1 class="conference-name">{{ user_profile.conference.conferenceName }}</h1>
     <h2 class="conference-details">{{ user_profile.conference.conferenceStartDate }} - {{ user_profile.conference.conferenceEndDate }}, {{ user_profile.conference.conferenceLocation }}</h2>
     <h3 class="affiliation">{{ user_profile.userUniversity }}</h3>
     <h4 class="name">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h4>
-    <h5 class="paper-title">{{ paper.paperTitle }}</h5>
-    <!-- ... -->
+    <h5 class="attend"> Has attended the conference and presented a paper entitled</h5>
+    <h5 class="paper-title"> Discussing the Relationship between Job Crafting and Social Acceptance from the Perspective of Social Influence Theory: The Mediating Effect of Social Acceptance</h5> -->
   </div>
   </body>
 </html>
