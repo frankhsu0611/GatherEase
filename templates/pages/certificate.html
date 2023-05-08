@@ -21,9 +21,17 @@
 
       /* Set the background image and its properties */
       background-image: url("{{ background_image_data_uri }}");
-      background-size: contain;
+      background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
+    }
+    .background-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
 
     #background-image {
@@ -33,53 +41,54 @@
       object-fit: cover;
 
       /* Position the image at the bottom layer */
-      position: absolute;
+      /* position: absolute; */
       z-index: -1;
       /* Set the background image and its properties */
       background-image: url("{{ background_image_data_uri }}");
-      background-size: contain;
+      background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
     }
 
-    .title {
-      font-family: Times New Roman;
-      font-size: 50px;
-    }
+    
   
     .certificate-content {
       /* Position the content in the center and middle of the page */
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      margin: 0;
+      padding-top: 100px;
+      padding-left: -50px; /* Add this line to shift the content to the left */
       text-align: center;
-      width: 90%;
+      box-sizing: border-box;
+      height: 100%;
 
+    }
+    .title {
+      font-family: Times New Roman;
+      font-size: 45px;
     }
     .conference-name,
     .conference-details {
-      font-size: 25px;
+      font-size: 20px;
     }
 
     .affiliation {
-      font-size: 25px;
+      font-size: 20px;
     }
 
     .name {
-      font-size: 25px;
+      font-size: 20px;
       text-decoration: underline;
     }
 
     .attend {
-      font-size: 15px;
+      font-size: 10px;
       font-style: italic;
       margin-bottom: 5px; /* Adjust this value to change the gap between the lines */
     }
 
     .paper-title {
       font-family: Cambria, serif;
-      font-size: 24px;
+      font-size: 19px;
       font-style: italic;
       text-decoration: underline;
       /* Add these lines */
@@ -104,7 +113,9 @@
   </style>
 </head>
 <body>
-  {% comment %} <img id="background-image" src="../static/img/certificate1.jpg" alt="Certificate Background"> {% endcomment %}
+  <div class="background-container">
+    <div class="background-image"></div>
+  </div>
   <div class="certificate-content">
     <!-- Add your certificate content here -->
     <h1 class="title">Certificate of Presentation</h1>
@@ -116,13 +127,7 @@
     <h5 class="paper-title"> {{ paper.paperTitle }}</h5>
     <!-- ... -->
 
-    <!-- <h1 class="title">Certificate of Presentation</h1>
-    <h1 class="conference-name">{{ user_profile.conference.conferenceName }}</h1>
-    <h2 class="conference-details">{{ user_profile.conference.conferenceStartDate }} - {{ user_profile.conference.conferenceEndDate }}, {{ user_profile.conference.conferenceLocation }}</h2>
-    <h3 class="affiliation">{{ user_profile.userUniversity }}</h3>
-    <h4 class="name">{{ user_profile.user.first_name }} {{ user_profile.user.last_name }}</h4>
-    <h5 class="attend"> Has attended the conference and presented a paper entitled</h5>
-    <h5 class="paper-title"> Discussing the Relationship between Job Crafting and Social Acceptance from the Perspective of Social Influence Theory: The Mediating Effect of Social Acceptance</h5> -->
+  
   </div>
   </body>
 </html>
