@@ -12,20 +12,19 @@ CONFERENCE_CODE = 'ICEASS2021'
 
 class Conference(models.Model):
     conferenceCode = models.CharField(max_length=20, primary_key=True)
-    conferenceName = models.CharField(
-        max_length=100, default='adminConference')
+    conferenceName = models.CharField(max_length=100, default='adminConference')
     conferenceStartDate = models.DateField(default=CONFERENCE_START_DATE)
     conferenceEndDate = models.DateField(default=CONFERENCE_END_DATE)
-    conferenceLocation = models.CharField(
-        max_length=30, default='adminLocation')
-    conferenceType = models.CharField(max_length=20, default='adminType')
-    # Specify the sub-directory within 'media' folder.
+    conferenceLocation = models.CharField(max_length=30, default='adminLocation')
     agenda = models.FileField(upload_to='agenda/')
-    # Specify the sub-directory within 'media' folder.
-    proceedings = models.FileField(upload_to='proceedings/')
-    # TO DO: add program
-    program = models.FileField(upload_to='program/')
+    
 
+class Track(models.Model):
+    trackCode = models.CharField(max_length=20, primary_key=True)
+    trackName = models.CharField(max_length=30)
+    Conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    proceedings = models.FileField(upload_to='proceedings/')
+    program = models.FileField(upload_to='program/')
 
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)
@@ -43,13 +42,14 @@ class Paper(models.Model):
     paperTitle = models.CharField(max_length=200)
 
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True)
     userCategory = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
     userUniversity = models.CharField(max_length=40)
-    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    tracks = models.ManyToManyField(Track)
 
     class Meta:
         verbose_name_plural = "UserProfiles"
@@ -59,8 +59,6 @@ class UserProfile(models.Model):
         if created:
             UserProfile.objects.create(
                 user=instance,
-                conference=Conference.objects.get(
-                    conferenceCode=CONFERENCE_CODE),
             )
 
     @receiver(post_save, sender=User)

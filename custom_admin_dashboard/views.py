@@ -3,7 +3,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 from django.contrib import messages
 import openpyxl
-from authentication.models import Conference, UserProfile, Event, Paper
+from authentication.models import Conference, UserProfile, Event, Paper, Track
 from .forms import AdminEventFileUploadForm, AdminUserProfileFileUploadForm, AdminPaperFileUploadForm
 
 
@@ -69,23 +69,22 @@ def upload_userprofiles_file(request):
                 password = row[4].value
                 user_category = row[5].value
                 user_country = row[6].value
-                conferenceCode = row[7].value  # Assuming conferenceCode is stored in the Excel file
+                track = row[7].value  # Assuming conferenceCode is stored in the Excel file
                 user_univeristy = row[8].value
 
                 user, created = User.objects.get_or_create(
                     username=username,
                     email=email,
                 )
-                if created:
-                    user.set_password(password)
-                    user.first_name = fname
-                    user.last_name = lname
-                    user.save()
-
+                user.set_password(password)
+                user.first_name = fname
+                user.last_name = lname
                 user.userprofile.userCategory = user_category
                 user.userprofile.userCountry = user_country
-                user.userprofile.conference = Conference.objects.get(conferenceCode=conferenceCode)
                 user.userprofile.userUniversity = user_univeristy
+                # only update if the track exists
+                if Track.objects.filter(trackCode=track).exists():
+                    user.userprofile.tracks.add(Track.objects.get(trackCode=track))
                 user.save() # Save the both user and UserProfile model instance 
             messages.success(request, "User profiles have been successfully imported.")
             

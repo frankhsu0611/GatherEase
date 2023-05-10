@@ -6,7 +6,7 @@ import pikepdf
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect
-from .models import UserProfile, Conference, Event, Paper
+from .models import UserProfile, Conference, Event, Paper, Track
 from datetime import datetime
 from xhtml2pdf import pisa
 from django.template.loader import get_template
@@ -30,13 +30,19 @@ def get_events(request):
     return None
 
 
-def download_proceedings(request):
+def get_tracks(request):
     user = request.user
     if user.is_authenticated:
         userProfile = UserProfile.objects.get(user=user)
-        conference = userProfile.conference
-        proceedings = conference.proceedings
-        return FileResponse(proceedings, as_attachment=True)
+        tracks = userProfile.tracks.all()
+        return tracks
+    return None
+
+def download_proceedings(request, track):
+    user = request.user
+    if user.is_authenticated:
+        userProfile = UserProfile.objects.get(user=user)
+        return FileResponse(track.proceedings, as_attachment=True)
     return redirect('sign-in')
 
 

@@ -16,12 +16,12 @@ def home(request):
     user = request.user
     if user.is_authenticated:
         userProfile = UserProfile.objects.get(user=user)
-        conference = userProfile.conference
-        events_now, events_following = get_events(request)
+        # conference = userProfile.conference
+        # events_now, events_following = get_events(request)
         context = {'userProfile': userProfile,
-                   'conference': conference,
-                   'events_now': events_now,
-                   'events_following': events_following
+                #    'conference': conference,
+                #    'events_now': events_now,
+                #    'events_following': events_following
                    }
         # print(user.id, context['events_now'])
         return render(request, 'authentication/index1.html', context)
