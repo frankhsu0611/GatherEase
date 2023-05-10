@@ -13,6 +13,6 @@ urlpatterns = [
     path('download/', views.download, name='download'),
     path('proceedings/download', api_utils.download_proceedings, name='download_proceedings'),
     path('program/download', api_utils.download_program, name='download_program'),
-    path('certificate/download', api_utils.dowload_certificate, name='download_certificate'),
+    #path('certificate/download', api_utils.dowload_certificate, name='download_certificate'),
     path('certificate/', views.certificate, name='certificate'),
 ]
