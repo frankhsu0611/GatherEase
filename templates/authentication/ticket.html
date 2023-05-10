@@ -8,7 +8,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="./static/img/logo.ico">
   <link rel="icon" type="image/png" href="./static/img/logo.ico">
   <title>
-    GatherEase Home
+    GatherEase Ticket
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -23,15 +23,6 @@
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
-  {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert dismissible fade show" role="alert">
-        <Strong>Message:</strong> {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden = "true">&times;</span>
-        </button>
-        </div>   
-  {% endfor %}
-  {% if user.is_authenticated %}
   <div class="min-height-300 bg-primary position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
@@ -455,70 +446,7 @@
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="./static/js/argon-dashboard.min.js?v=2.0.4"></script>
 
-  <!-- Before Sign In HOME page -->
-  {% else %}
-  <div class="container position-sticky z-index-sticky top-0">
-    <div class="row">
-    </div>
-  </div>
-  <main class="main-content  mt-0">
-    <section>
-      <div class="page-header min-vh-100">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
-              <div class="card card-plain">
-                <div class="card-header pb-0 text-center">
-                  <div class="logo-container">
-                    <img src="../static/img/logo.png" alt="Logo" width="200" height="200">
-                  </div>
-                  <h4 class="font-weight-bolder">Welcome to GatherEase!</h4>
-                
-                  <div class="text-center">
-                    <a href="/signin" class="btn btn-lg btn-primary w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign In</a>
-                    <a href="/signup" class="btn btn-lg btn-primary w-100 mt-4 mb-0" style="background-color: #52b8e1">Sign Up</a>
-                    <br>
-                    <br>
-                    <br>
-                  </div>
-                </div>
-              </div>
-            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-              <div class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('../static/img/sign.jpg');
-          background-size: cover;">
-                <span class="mask bg-gradient-primary opacity-3"></span>
-
-                <h4 class="mt-5 text-white font-weight-bolder position-relative">"We make your event easy"</h4>
-                <p class="text-white position-relative">The more effortless the event looks, the more effort the planner actually put into the process.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <!--   Core JS Files   -->
-  <script src="../static/js/core/popper.min.js"></script>
-  <script src="../static/js/core/bootstrap.min.js"></script>
-  <script src="../static/js/plugins/perfect-scrollbar.min.js"></script>
-  <script src="../static/js/plugins/smooth-scrollbar.min.js"></script>
-  <script>
-    var win = navigator.platform.indexOf('Win') > -1;
-    if (win && document.querySelector('#sidenav-scrollbar')) {
-      var options = {
-        damping: '0.5'
-      }
-      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-    }
-  </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../static/js/argon-dashboard.min.js?v=2.0.4"></script>
   
-  {% endif %}
-  {% comment %} <iframe src={{ user.userprofile.conference.agendaURL }} width="100%" height="500px">
-  </iframe> {% endcomment %}
 </body>
 
 </html>
