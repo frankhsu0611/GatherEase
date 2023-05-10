@@ -53,43 +53,44 @@ def download_program(request):
         conference = userProfile.conference
         program = conference.program
         return FileResponse(program, as_attachment=True)
-
-
-def dowload_certificate(request):
-    if request.user.is_authenticated:
-        paper = Paper.objects.get(user=request.user)
-        context = {
-            "user_profile": UserProfile.objects.get(user=request.user),
-            "paper": paper,
-            "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
-        }
-        pdf = render_html_to_pdf('pages/certificate.html', context)
-
-        if pdf is None:
-            return HttpResponse("An error occurred while generating the PDF. Please check the server logs for more information.")
-
-        pdf_content = pdf.getvalue()
-        response = HttpResponse(pdf_content, content_type='application/pdf')
-        filename = "certificate.pdf"
-        response['Content-Disposition'] = f"attachment; filename={filename}"
-        return response
     return redirect('sign-in')
 
 
-def render_html_to_pdf(template_src, context={}):
-    template = get_template(template_src)
-    html = template.render(context)
-    result = io.BytesIO()
+# def dowload_certificate(request):
+#     if request.user.is_authenticated:
+#         paper = Paper.objects.get(user=request.user)
+#         context = {
+#             "user_profile": UserProfile.objects.get(user=request.user),
+#             "paper": paper,
+#             "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
+#         }
+#         pdf = render_html_to_pdf('pages/certificate.html', context)
 
-    HTML(string=html).write_pdf(result)
+#         if pdf is None:
+#             return HttpResponse("An error occurred while generating the PDF. Please check the server logs for more information.")
 
-    return result
+#         pdf_content = pdf.getvalue()
+#         response = HttpResponse(pdf_content, content_type='application/pdf')
+#         filename = "certificate.pdf"
+#         response['Content-Disposition'] = f"attachment; filename={filename}"
+#         return response
+#     return redirect('sign-in')
 
 
-def get_image_data_uri(image_path):
-    with open(image_path, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-    return f"data:image/jpeg;base64,{encoded_string.decode('utf-8')}"
+# def render_html_to_pdf(template_src, context={}):
+#     template = get_template(template_src)
+#     html = template.render(context)
+#     result = io.BytesIO()
+
+#     HTML(string=html).write_pdf(result)
+
+#     return result
+
+
+# def get_image_data_uri(image_path):
+#     with open(image_path, "rb") as image_file:
+#         encoded_string = base64.b64encode(image_file.read())
+#     return f"data:image/jpeg;base64,{encoded_string.decode('utf-8')}"
 
 
 def merge_pdfs(pdfs):

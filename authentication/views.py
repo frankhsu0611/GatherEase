@@ -5,14 +5,20 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper
-from .api_utils import get_events, get_image_data_uri
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 
 # Create your views here.
 
 
-
+def home(request):
+    user = request.user
+    if user.is_authenticated:  
+        user_tracks = user.userprofile.tracks.all()
+        context = {"Conferences": Conference.objects.filter(track__in=user_tracks)}
+        return render(request, 'authentication/index.html', context)
+    return render(request, 'authentication/index1.html')
+    
 
 def ticket(request):
     user = request.user
