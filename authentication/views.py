@@ -12,7 +12,9 @@ from django.template.loader import get_template
 # Create your views here.
 
 
-def home(request):
+
+
+def ticket(request):
     user = request.user
     if user.is_authenticated:
         userProfile = UserProfile.objects.get(user=user)
@@ -24,8 +26,8 @@ def home(request):
                 #    'events_following': events_following
                    }
         # print(user.id, context['events_now'])
-        return render(request, 'authentication/index1.html', context)
-    return render(request, 'authentication/index.html')
+        return render(request, 'authentication/ticket.html', context)
+    return render(request, 'authentication/index1.html')
 
 
 def signup(request):
