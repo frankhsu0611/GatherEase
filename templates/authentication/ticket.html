@@ -5,21 +5,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="./static/img/logo.ico">
-  <link rel="icon" type="image/png" href="./static/img/logo.ico">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/logo.ico' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/logo.ico' %}">
   <title>
     GatherEase Ticket
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
   <!-- Nucleo Icons -->
-  <link href="./static/css/nucleo-icons.css" rel="stylesheet" />
-  <link href="./static/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="{% static 'css/nucleo-icons.css' %}" rel="stylesheet" />
+
+  <link href="{% static 'css/nucleo-svg.css' %}" rel="stylesheet" />
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-  <link href="./static/css/nucleo-svg.css" rel="stylesheet" />
+  <link href="../static/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
-  <link id="pagestyle" href="./static/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <link id="pagestyle" href="{% static 'css/argon-dashboard.css' %}" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -28,7 +29,7 @@
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href="#" target="_blank">
-        <img src="./static/img/logo1.png" class="navbar-brand-img h-100" alt="main_logo">
+        <img src="{% static 'img/logo1.png' %}" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">GatherEase Home</span>
       </a>
     </div>
@@ -88,7 +89,7 @@
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <div class="logo-container" style="display: flex; justify-content: center; align-items: center;">
-            <img src="./static/img/logo1.png" alt="GatherEase Logo" style="max-width: 10%; max-height: 10%;">
+            <img src="{% static 'img/logo1.png' %}" alt="GatherEase Logo" style="max-width: 10%; max-height: 10%;">
           </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
@@ -123,7 +124,7 @@
                       </div>
                       <div class="col-4 text-end">
                           <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
-                              <img src="./static/img/ticket.png" alt="ticket flag" style="width: 60px; height: 60px; margin-right: 8px;">
+                              <img src="{% static 'img/ticket.png' %}" alt="ticket flag" style="width: 60px; height: 60px; margin-right: 8px;">
                           </div>
                       </div>
                   </div>
@@ -182,13 +183,13 @@
                 <!-- purple #cfd5f7 -->
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/topic.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/topic.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventTheme }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/time1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
                   </div>
                 </div>
@@ -200,7 +201,7 @@
                 </div>
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/room1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/room1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventRoom }}</h6>
                   </div>
                 </div>
@@ -212,25 +213,25 @@
               <div class="row mb-3" style="padding: 10px;">
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/topic.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/topic.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventTheme }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/time1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/speaker.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/speaker.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.keynoteSpeaker }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
-                    <img src="./static/img/icons/event/room1.png" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    <img src="{% static 'img/icons/event/room1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
                     <h6 class="text-sm mb-0">{{ event.eventRoom }}</h6>
                   </div>
                 </div>
