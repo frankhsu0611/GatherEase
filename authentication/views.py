@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import UserProfile, Conference, Event, Paper
+from .models import UserProfile, Conference, Event, Paper, Track
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 
@@ -15,23 +15,18 @@ def home(request):
     user = request.user
     if user.is_authenticated:  
         user_tracks = user.userprofile.tracks.all()
-        context = {"Conferences": Conference.objects.filter(track__in=user_tracks)}
+        context = {"tracks": user_tracks}
         return render(request, 'authentication/index.html', context)
     return render(request, 'authentication/index1.html')
     
 
-def ticket(request):
+def ticket(request, track_code):
     user = request.user
     if user.is_authenticated:
         userProfile = UserProfile.objects.get(user=user)
-        # conference = userProfile.conference
-        # events_now, events_following = get_events(request)
-        context = {'userProfile': userProfile,
-                #    'conference': conference,
-                #    'events_now': events_now,
-                #    'events_following': events_following
-                   }
-        # print(user.id, context['events_now'])
+        track = get_object_or_404(Track, trackCode=track_code)
+        conference = track.Conference
+        context = {"userProfile": userProfile, "track": track, "conference": conference}
         return render(request, 'authentication/ticket.html', context)
     return render(request, 'authentication/index1.html')
 
@@ -148,7 +143,7 @@ def certificate(request):
         context = {
             'user_profile': user_profile,
             'paper': paper,
-            "background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
+            #"background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
         }
 
         return render(request, 'pages/certificate.html', context)
