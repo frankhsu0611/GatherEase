@@ -118,10 +118,9 @@ def signout(request):
 # write a function to show agenda page and pass a http response that contains the agenda.pdf stored in media/ducoment folder
 
 
-def agenda(request):
-    user = request.user
-    userProfile = UserProfile.objects.get(user=user)
-    conference = userProfile.conference
+def agenda(request, track_code):
+    track = get_object_or_404(Track, trackCode=track_code)
+    conference = track.Conference
     return render(request, 'pages/agenda.html', {'conference': conference})
 
 

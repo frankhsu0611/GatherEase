@@ -44,31 +44,45 @@
         </div>
     </nav>
     <!-- End Navbar -->
-
     <div class="container-fluid py-4">
-        <div class="row">
+      <div class="row">
           <div class="col-xl-3 col-md-6 col-12 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">ID Number</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ user.username }}
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
-                                <img src="./static/img/ticket.png" alt="ticket flag" style="width: 60px; height: 60px; margin-right: 8px;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+              <h5 class="font-weight-bolder">
+                  Your Conference
+              </h5>
+          </div>
+      </div>
+      <div class="row">
+          {% for track in tracks %}
+              <div class="col-xl-3 col-md-6 col-12 mb-xl-0 mb-4">
+                <a href="{% url 'ticket' track.trackCode %}">
+                      <div class="card">
+                          <div class="card-body p-3">
+                              <div class="row">
+                                  <div class="col-8">
+                                      <div class="numbers">
+                                          <p class="text-sm mb-0 text-uppercase font-weight-bold">Conference Name</p>
+                                          <h5 class="font-weight-bolder">
+                                              {{ track.Conference.conferenceName}}
+                                              {{ track.trackName }}
+                                          </h5>
+                                      </div>
+                                  </div>
+                                  <div class="col-4 text-end">
+                                      <div class="d-flex justify-content-end align-items-center" style="height: 100%;">
+                                          <img src="./static/img/ticket.png" alt="ticket flag" style="width: 60px; height: 60px; margin-right: 8px;">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+          {% endfor %}
+      </div>
+  </div>
+  
+  
 
 
     <!--   Core JS Files   -->
