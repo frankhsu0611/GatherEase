@@ -124,12 +124,11 @@ def agenda(request, track_code):
     return render(request, 'pages/agenda.html', {'conference': conference})
 
 
-def download(request):
+def download(request, track_code):
     user = request.user
     if user.is_authenticated:
-        userProfile = UserProfile.objects.get(user=user)
-        conference = userProfile.conference
-        return render(request, 'pages/download.html', {'conference': conference})
+        track = get_object_or_404(Track, trackCode=track_code)
+        return render(request, 'pages/download.html', {'track': track})
     return redirect('sign-in')
 
 
