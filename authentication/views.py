@@ -4,21 +4,24 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from .models import UserProfile, Conference, Event, Paper, Track
+from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
+import qrcode
+from io import BytesIO
+from django.core.files.base import ContentFile
 
 # Create your views here.
 
 
 def home(request):
     user = request.user
-    if user.is_authenticated:  
+    if user.is_authenticated:
         user_tracks = user.userprofile.tracks.all()
         context = {"tracks": user_tracks}
         return render(request, 'authentication/index.html', context)
     return render(request, 'authentication/index1.html')
-    
+
 
 def ticket(request, track_code):
     user = request.user
@@ -26,9 +29,28 @@ def ticket(request, track_code):
         userProfile = UserProfile.objects.get(user=user)
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
-        context = {"userProfile": userProfile, "track": track, "conference": conference}
+        context = {"userProfile": userProfile,
+                   "track": track, "conference": conference}
         return render(request, 'authentication/ticket.html', context)
     return render(request, 'authentication/index1.html')
+
+# def ticket(request, track_code):
+#     user = request.user
+#     if user.is_authenticated:
+#         userProfile = UserProfile.objects.get(user=user)
+#         track = get_object_or_404(Track, trackCode=track_code)
+#         conference = track.Conference
+#         ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
+#         qr_code = generate_qr_code(str(ticket.id))
+#         context = {
+#             "userProfile": userProfile,
+#             "track": track,
+#             "conference": conference,
+#             "ticket": ticket,
+#             "qr_code": qr_code
+#         }
+#         return render(request, 'authentication/ticket.html', context)
+#     return render(request, 'authentication/index1.html')
 
 
 def signup(request):
@@ -136,6 +158,23 @@ def download(request, track_code):
         context = {"track": track, "conference": conference}
         return render(request, 'pages/download.html', context)
     return redirect('sign-in')
+
+
+def generate_qr_code(data):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=6,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = BytesIO()
+    img.save(buffer, "PNG")
+    buffer.seek(0)
+    return ContentFile(buffer.read(), 'qr_code.png')
 
 
 # def certificate(request):

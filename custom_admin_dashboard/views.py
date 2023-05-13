@@ -5,8 +5,8 @@ from django.contrib import messages
 import openpyxl
 from authentication.models import Conference, UserProfile, Event, Paper, Track
 from .forms import AdminEventFileUploadForm, AdminUserProfileFileUploadForm, AdminPaperFileUploadForm
-
-
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 def home_dashboard(request):
@@ -15,7 +15,8 @@ def home_dashboard(request):
     # Prepare data for chart
     chart_data = []
     for conference in conferences:
-        user_profiles = UserProfile.objects.filter(conference=conference)
+        user_profiles = UserProfile.objects.filter(
+            tracks__Conference=conference)
         country_count = user_profiles.values(
             'userCountry').annotate(count=Count('userCountry'))
         chart_data.append({
@@ -26,8 +27,40 @@ def home_dashboard(request):
     return render(request, 'custom_admin_dashboard/home_dashboard.html', {
         'chart_data': chart_data,
     })
-    
+
 # custom_admin_dashboard/admin.py
+
+
+def scanner(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden()
+
+    checked_in_tickets = Ticket.objects.filter(checkin=True)
+    not_checked_in_tickets = Ticket.objects.filter(checkin=False)
+
+    return render(request, 'scanner.html', {
+        'checked_in_tickets': checked_in_tickets,
+        'not_checked_in_tickets': not_checked_in_tickets,
+    })
+
+
+# @csrf_exempt
+# def process_qr_code(request):
+#     if not request.user.is_staff:
+#         return HttpResponseForbidden()
+
+#     if request.method == 'POST':
+#         ticket_id = request.POST.get('ticket_id')
+#         try:
+#             ticket = Ticket.objects.get(id=ticket_id)
+#             ticket.checkin = True
+#             ticket.save()
+#             return JsonResponse({'status': 'success'})
+#         except Ticket.DoesNotExist:
+#             return JsonResponse({'status': 'error', 'message': 'Ticket not found'})
+#     else:
+#         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
 
 def upload_event_file(request):
     if request.method == 'POST':
@@ -42,7 +75,8 @@ def upload_event_file(request):
                     eventTheme=row[1].value,
                     eventStartTime=row[2].value,
                     eventEndTime=row[3].value,
-                    conference_id=row[4].value,  # Assuming conference_id is stored in the Excel file
+                    # Assuming conference_id is stored in the Excel file
+                    conference_id=row[4].value,
                     keynoteSpeaker=row[5].value,
                     eventRoom=row[6].value,
                 )
@@ -69,7 +103,8 @@ def upload_userprofiles_file(request):
                 password = row[4].value
                 user_category = row[5].value
                 user_country = row[6].value
-                track = row[7].value  # Assuming conferenceCode is stored in the Excel file
+                # Assuming conferenceCode is stored in the Excel file
+                track = row[7].value
                 user_univeristy = row[8].value
 
                 user, created = User.objects.get_or_create(
@@ -84,16 +119,19 @@ def upload_userprofiles_file(request):
                 user.userprofile.userUniversity = user_univeristy
                 # only update if the track exists
                 if Track.objects.filter(trackCode=track).exists():
-                    user.userprofile.tracks.add(Track.objects.get(trackCode=track))
-                user.save() # Save the both user and UserProfile model instance 
-            messages.success(request, "User profiles have been successfully imported.")
-            
-            #URL pattern of admin follows the singular form of the model name
-            return redirect('admin:authentication_userprofile_changelist') 
+                    user.userprofile.tracks.add(
+                        Track.objects.get(trackCode=track))
+                user.save()  # Save the both user and UserProfile model instance
+            messages.success(
+                request, "User profiles have been successfully imported.")
+
+            # URL pattern of admin follows the singular form of the model name
+            return redirect('admin:authentication_userprofile_changelist')
     else:
         form = AdminUserProfileFileUploadForm()
 
     return render(request, 'admin/upload_userprofiles_file.html', {'form': form})
+
 
 def upload_paper_file(request):
     if request.method == 'POST':
