@@ -119,32 +119,38 @@ def signout(request):
 
 
 def agenda(request, track_code):
-    track = get_object_or_404(Track, trackCode=track_code)
-    conference = track.Conference
-    return render(request, 'pages/agenda.html', {'conference': conference})
+    user = request.user
+    if user.is_authenticated:
+        track = get_object_or_404(Track, trackCode=track_code)
+        conference = track.Conference
+        context = {"track": track, "conference": conference}
+        return render(request, 'pages/agenda.html', context)
+    return redirect('sign-in')
 
 
 def download(request, track_code):
     user = request.user
     if user.is_authenticated:
         track = get_object_or_404(Track, trackCode=track_code)
-        return render(request, 'pages/download.html', {'track': track})
+        conference = track.Conference
+        context = {"track": track, "conference": conference}
+        return render(request, 'pages/download.html', context)
     return redirect('sign-in')
 
 
-def certificate(request):
-    if request.user.is_authenticated:
-        user = request.user
-        user_profile = UserProfile.objects.get(user=user)
-        paper = Paper.objects.get(user=user)
+# def certificate(request):
+#     if request.user.is_authenticated:
+#         user = request.user
+#         user_profile = UserProfile.objects.get(user=user)
+#         paper = Paper.objects.get(user=user)
 
-        context = {
-            'user_profile': user_profile,
-            'paper': paper,
-            #"background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
-        }
+#         context = {
+#             'user_profile': user_profile,
+#             'paper': paper,
+#             #"background_image_data_uri": get_image_data_uri("static/img/certificate1.jpg"),
+#         }
 
-        return render(request, 'pages/certificate.html', context)
-    else:
-        messages.error(request, "Please log in to view your certificate.")
-        return redirect('sign-in')
+#         return render(request, 'pages/certificate.html', context)
+#     else:
+#         messages.error(request, "Please log in to view your certificate.")
+#         return redirect('sign-in')

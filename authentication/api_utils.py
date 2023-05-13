@@ -38,23 +38,28 @@ def get_tracks(request):
         return tracks
     return None
 
-def download_proceedings(request, track):
+def download_proceedings(request, track_code):
     user = request.user
     if user.is_authenticated:
-        userProfile = UserProfile.objects.get(user=user)
+        track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.proceedings, as_attachment=True)
     return redirect('sign-in')
 
 
-def download_program(request):
+def download_program(request, track_code):
     user = request.user
     if user.is_authenticated:
-        userProfile = UserProfile.objects.get(user=user)
-        conference = userProfile.conference
-        program = conference.program
-        return FileResponse(program, as_attachment=True)
+        track = Track.objects.get(trackCode=track_code)
+        return FileResponse(track.program, as_attachment=True)
     return redirect('sign-in')
 
+def download_certificate(request, track_code):
+    user = request.user
+    if user.is_authenticated:
+        track = Track.objects.get(trackCode=track_code)
+        return FileResponse(track.certificate, as_attachment=True)
+    return redirect('sign-in')
+    
 
 # def dowload_certificate(request):
 #     if request.user.is_authenticated:

@@ -12,8 +12,8 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('agenda/<str:track_code>/', views.agenda, name='agenda'),
     path('download/<str:track_code>/', views.download, name='download'),
-    path('proceedings/download', api_utils.download_proceedings, name='download_proceedings'),
-    path('program/download', api_utils.download_program, name='download_program'),
-    # path('certificate/download', api_utils.dowload_certificate, name='download_certificate'),
-    path('certificate/', views.certificate, name='certificate'),
+    path('proceedings/download/<str:track_code>/', api_utils.download_proceedings, name='download_proceedings'),
+    path('program/download/<str:track_code>/', api_utils.download_program, name='download_program'),
+    path('certificate/download/<str:track_code>/', api_utils.download_certificate, name='download_certificate'),
+    #path('certificate/', views.certificate, name='download_certificate'),
 ]
