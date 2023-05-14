@@ -16,8 +16,9 @@ from django.core.files.base import ContentFile
 def home(request):
     user = request.user
     if user.is_authenticated:
+        tickets = Ticket.objects.filter(user=user)
         user_tracks = user.userprofile.tracks.all()
-        context = {"tracks": user_tracks}
+        context = {"tickets": tickets, "tracks": user_tracks}
         return render(request, 'authentication/index.html', context)
     return render(request, 'authentication/index1.html')
 
@@ -33,19 +34,21 @@ def home(request):
 #         return render(request, 'authentication/ticket.html', context)
 #     return render(request, 'authentication/index1.html')
 
-def ticket(request, track_code):
+def ticket(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.trackCode
         userProfile = UserProfile.objects.get(user=user)
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
         ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
         qr_code = generate_qr_code(str(ticket.id))
         context = {
+            "tickets": ticket,
             "userProfile": userProfile,
             "track": track,
             "conference": conference,
-            "ticket": ticket,
             "qr_code": qr_code
         }
         return render(request, 'authentication/ticket.html', context)
@@ -139,22 +142,26 @@ def signout(request):
 # write a function to show agenda page and pass a http response that contains the agenda.pdf stored in media/ducoment folder
 
 
-def agenda(request, track_code):
+def agenda(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
-        context = {"track": track, "conference": conference}
+        context = {"ticket":ticket, "track": track, "conference": conference}
         return render(request, 'pages/agenda.html', context)
     return redirect('sign-in')
 
 
-def download(request, track_code):
+def download(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
-        context = {"track": track, "conference": conference}
+        context = {"ticket":ticket, "track": track, "conference": conference}
         return render(request, 'pages/download.html', context)
     return redirect('sign-in')
 
