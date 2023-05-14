@@ -6,7 +6,7 @@ import pikepdf
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect
-from .models import UserProfile, Conference, Event, Paper, Track
+from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from datetime import datetime
 from xhtml2pdf import pisa
 from django.template.loader import get_template
@@ -38,24 +38,30 @@ def get_tracks(request):
         return tracks
     return None
 
-def download_proceedings(request, track_code):
+def download_proceedings(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.track.trackCode
         track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.proceedings, as_attachment=True)
     return redirect('sign-in')
 
 
-def download_program(request, track_code):
+def download_program(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.track.trackCode
         track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.program, as_attachment=True)
     return redirect('sign-in')
 
-def download_certificate(request, track_code):
+def download_certificate(request, ticket_id):
     user = request.user
     if user.is_authenticated:
+        ticket = Ticket.objects.get(ticket_id=ticket_id)
+        track_code = ticket.track.trackCode
         track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.certificate, as_attachment=True)
     return redirect('sign-in')

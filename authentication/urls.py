@@ -6,14 +6,14 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('ticket/<str:track_code>/', views.ticket, name='ticket'),
+    path('ticket/<str:ticket_id>/', views.ticket, name='ticket'),
     path('signup/', views.signup, name='sign-up'),
     path('signin/', views.signin, name='sign-in'),
     path('signout/', views.signout, name='signout'),
-    path('agenda/<str:track_code>/', views.agenda, name='agenda'),
-    path('download/<str:track_code>/', views.download, name='download'),
-    path('proceedings/download/<str:track_code>/', api_utils.download_proceedings, name='download_proceedings'),
-    path('program/download/<str:track_code>/', api_utils.download_program, name='download_program'),
-    path('certificate/download/<str:track_code>/', api_utils.download_certificate, name='download_certificate'),
+    path('agenda/<str:ticket_id>/', views.agenda, name='agenda'),
+    path('download/<str:ticket_id>/', views.download, name='download'),
+    path('proceedings/download/<str:ticket_id>/', api_utils.download_proceedings, name='download_proceedings'),
+    path('program/download/<str:ticket_id>/', api_utils.download_program, name='download_program'),
+    path('certificate/download/<str:ticket_id>/', api_utils.download_certificate, name='download_certificate'),
     #path('certificate/', views.certificate, name='download_certificate'),
 ]

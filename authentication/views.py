@@ -37,12 +37,11 @@ def ticket(request, ticket_id):
     user = request.user
     if user.is_authenticated:
         ticket = Ticket.objects.get(ticket_id=ticket_id)
-        track_code = ticket.trackCode
         userProfile = UserProfile.objects.get(user=user)
-        track = get_object_or_404(Track, trackCode=track_code)
+        track = ticket.track
         conference = track.Conference
-        ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
-        qr_code = generate_qr_code(str(ticket.id))
+        ticket = get_object_or_404(Ticket, user=user, track = track)
+        qr_code = generate_qr_code(str(ticket_id))
         context = {
             "ticket": ticket,
             "userProfile": userProfile,
@@ -145,7 +144,7 @@ def agenda(request, ticket_id):
     user = request.user
     if user.is_authenticated:
         ticket = Ticket.objects.get(ticket_id=ticket_id)
-        track_code = ticket.trackCode
+        track_code = ticket.track.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
         context = {"ticket": ticket, "track": track, "conference": conference}
@@ -157,7 +156,7 @@ def download(request, ticket_id):
     user = request.user
     if user.is_authenticated:
         ticket = Ticket.objects.get(ticket_id=ticket_id)
-        track_code = ticket.trackCode
+        track_code = ticket.track.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
         context = {"ticket": ticket, "track": track, "conference": conference}
