@@ -17,8 +17,7 @@ def home(request):
     user = request.user
     if user.is_authenticated:
         tickets = Ticket.objects.filter(user=user)
-        user_tracks = user.userprofile.tracks.all()
-        context = {"tickets": tickets, "tracks": user_tracks}
+        context = {"tickets": tickets}
         return render(request, 'authentication/index.html', context)
     return render(request, 'authentication/index1.html')
 
@@ -45,7 +44,7 @@ def ticket(request, ticket_id):
         ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
         qr_code = generate_qr_code(str(ticket.id))
         context = {
-            "tickets": ticket,
+            "ticket": ticket,
             "userProfile": userProfile,
             "track": track,
             "conference": conference,
@@ -149,7 +148,7 @@ def agenda(request, ticket_id):
         track_code = ticket.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
-        context = {"ticket":ticket, "track": track, "conference": conference}
+        context = {"ticket": ticket, "track": track, "conference": conference}
         return render(request, 'pages/agenda.html', context)
     return redirect('sign-in')
 
@@ -161,7 +160,7 @@ def download(request, ticket_id):
         track_code = ticket.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
         conference = track.Conference
-        context = {"ticket":ticket, "track": track, "conference": conference}
+        context = {"ticket": ticket, "track": track, "conference": conference}
         return render(request, 'pages/download.html', context)
     return redirect('sign-in')
 
