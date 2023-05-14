@@ -1,7 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, FileResponse
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
@@ -23,34 +22,34 @@ def home(request):
     return render(request, 'authentication/index1.html')
 
 
-def ticket(request, track_code):
-    user = request.user
-    if user.is_authenticated:
-        userProfile = UserProfile.objects.get(user=user)
-        track = get_object_or_404(Track, trackCode=track_code)
-        conference = track.Conference
-        context = {"userProfile": userProfile,
-                   "track": track, "conference": conference}
-        return render(request, 'authentication/ticket.html', context)
-    return render(request, 'authentication/index1.html')
-
 # def ticket(request, track_code):
 #     user = request.user
 #     if user.is_authenticated:
 #         userProfile = UserProfile.objects.get(user=user)
 #         track = get_object_or_404(Track, trackCode=track_code)
 #         conference = track.Conference
-#         ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
-#         qr_code = generate_qr_code(str(ticket.id))
-#         context = {
-#             "userProfile": userProfile,
-#             "track": track,
-#             "conference": conference,
-#             "ticket": ticket,
-#             "qr_code": qr_code
-#         }
+#         context = {"userProfile": userProfile,
+#                    "track": track, "conference": conference}
 #         return render(request, 'authentication/ticket.html', context)
 #     return render(request, 'authentication/index1.html')
+
+def ticket(request, track_code):
+    user = request.user
+    if user.is_authenticated:
+        userProfile = UserProfile.objects.get(user=user)
+        track = get_object_or_404(Track, trackCode=track_code)
+        conference = track.Conference
+        ticket = get_object_or_404(Ticket, user=user, trackCode=track_code)
+        qr_code = generate_qr_code(str(ticket.id))
+        context = {
+            "userProfile": userProfile,
+            "track": track,
+            "conference": conference,
+            "ticket": ticket,
+            "qr_code": qr_code
+        }
+        return render(request, 'authentication/ticket.html', context)
+    return render(request, 'authentication/index1.html')
 
 
 def signup(request):

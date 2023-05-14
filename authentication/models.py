@@ -29,6 +29,26 @@ class Track(models.Model):
     proceedings = models.FileField(upload_to='proceedings/')
     program = models.FileField(upload_to='program/')
 
+class Ticket(models.Model):
+    ticket_id = models.CharField(max_length=40, primary_key=True, default=uuid.uuid4)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE)
+    checkin = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.track.trackName}'
+
+    def generate_ticket_id(self):
+        return f"{self.user.pk}-{self.track.pk}-{uuid.uuid4()}"
+
+    def save(self, *args, **kwargs):
+        if not self.ticket_id:
+            self.ticket_id = self.generate_ticket_id()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ('user', 'track')
+        verbose_name_plural = "Tickets"
 
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)
@@ -52,7 +72,7 @@ class UserProfile(models.Model):
     userCategory = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
     userUniversity = models.CharField(max_length=40)
-    tracks = models.ManyToManyField(Track)
+    tickets = models.ManyToManyField(Ticket)
 
     class Meta:
         verbose_name_plural = "UserProfiles"
@@ -69,23 +89,4 @@ class UserProfile(models.Model):
         instance.userprofile.save()
 
 
-class Ticket(models.Model):
-    ticket_id = models.CharField(max_length=40, primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, on_delete=models.CASCADE)
-    checkin = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f'{self.user.username} - {self.track.trackName}'
-
-    def generate_ticket_id(self):
-        return f"{self.user.pk}-{self.track.pk}-{uuid.uuid4()}"
-
-    def save(self, *args, **kwargs):
-        if not self.ticket_id:
-            self.ticket_id = self.generate_ticket_id()
-        super().save(*args, **kwargs)
-
-    class Meta:
-        unique_together = ('user', 'track')
-        verbose_name_plural = "Tickets"

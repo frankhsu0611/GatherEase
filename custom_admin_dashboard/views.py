@@ -3,9 +3,9 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 from django.contrib import messages
 import openpyxl
-from authentication.models import Conference, UserProfile, Event, Paper, Track
+from authentication.models import Conference, UserProfile, Event, Paper, Track, Ticket
 from .forms import AdminEventFileUploadForm, AdminUserProfileFileUploadForm, AdminPaperFileUploadForm
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -104,7 +104,7 @@ def upload_userprofiles_file(request):
                 user_category = row[5].value
                 user_country = row[6].value
                 # Assuming conferenceCode is stored in the Excel file
-                track = row[7].value
+                trackCode = row[7].value
                 user_univeristy = row[8].value
 
                 user, created = User.objects.get_or_create(
@@ -118,12 +118,21 @@ def upload_userprofiles_file(request):
                 user.userprofile.userCountry = user_country
                 user.userprofile.userUniversity = user_univeristy
                 # only update if the track exists
-                if Track.objects.filter(trackCode=track).exists():
-                    user.userprofile.tracks.add(
-                        Track.objects.get(trackCode=track))
+                if not Track.objects.filter(trackCode=trackCode).exists():
+                    messages.error(request, f"Track {trackCode} does not exist.")
+                else:
+                    if Ticket.objects.filter(user=user, track__trackCode=trackCode).exists():
+                        messages.error(request, f"User {user.username} already has a ticket for track {trackCode}.")
+                    else:
+                        ticket = Ticket.objects.create(
+                            user=user,
+                            track=Track.objects.get(trackCode=trackCode),
+                        )
+                        ticket.save() # it also generate a ticket id
+                        user.userprofile.tickets.add(ticket)
                 user.save()  # Save the both user and UserProfile model instance
-            messages.success(
-                request, "User profiles have been successfully imported.")
+                
+            messages.success(request, "User profiles have been successfully imported.")
 
             # URL pattern of admin follows the singular form of the model name
             return redirect('admin:authentication_userprofile_changelist')
