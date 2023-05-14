@@ -10,34 +10,115 @@
     {% block extrahead %}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script> <!-- Add this line -->
+        <script src="https://unpkg.com/html5-qrcode@2.0.6/minified/html5-qrcode.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
     {% endblock %}
     
     {% block content %}
-    <h1>Custom Admin Homepage Dashboard</h1>
-    
-        <h2>Scanner</h2>
-        <video id="preview" style="width: 100%; max-width: 400px; height: auto;"></video>
-        <script>
-            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-            scanner.addListener('scan', function (content) {
-                console.log(content);
-                // Use AJAX to send the scanned ticket ID to a Django view for processing
-            });
-            Instascan.Camera.getCameras().then(function (cameras) {
-                if (cameras.length > 0) {
-                    scanner.start(cameras[0]);
-                } else {
-                    console.error('No cameras found.');
-                }
-            }).catch(function (e) {
-                console.error(e);
-            });
-        </script>
+    {% csrf_token %}
+    <script>
+        const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    </script>
 
+    <h1>Custom Admin Dashboard</h1>
+    
+    <h2>QR Code Scanner</h2>
+    <button id="startScanner" type="button">Open QR Code Scanner</button>
+    <video id="preview" style="width: 100%; max-width: 400px; height: auto; display: none;"></video>
+    <script>
+        const startScannerBtn = document.getElementById("startScanner");
+        const preview = document.getElementById("preview");
+        let scanner;
+    
+        startScannerBtn.addEventListener("click", () => {
+            if (!scanner) {
+                scanner = new Instascan.Scanner({ video: preview });
+                scanner.addListener("scan", (content) => {
+                    console.log(content);
+                    scanner.addListener('scan', function (content) {
+                    console.log(content);
+                    // Use AJAX to send the scanned ticket ID to a Django view for processing
+                    fetch('/admin/process_ticket/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: JSON.stringify({ ticket_id: content })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Handle successful check-in
+                            alert('Check-in successful!');
+                        } else {
+                            // Handle failed check-in
+                            alert('Check-in failed!');
+                        }
+                    });
+                });
+
+                });
+            }
+    
+            Instascan.Camera.getCameras()
+                .then((cameras) => {
+                    if (cameras.length > 0) {
+                        scanner.start(cameras[0]);
+                        preview.style.display = "block";
+                    } else {
+                        console.error("No cameras found.");
+                    }
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
+        });
+    </script>
         
         
         {% for data in chart_data %}
-            <h2>{{ data.conference }}</h2>
+        <h2>{{ data.conference }}</h2>
+        <h3>Checked-in Tickets</h3>
+        <p>Check-in Count: {{ context.checkin_count }}  |  Check-in Percentage: {{ context.checkin_percentage }}%</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Track</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in context.checked_tickets %}
+                        <tr>
+                            <td>{{ ticket.user.username }}</td>
+                            <td>{{ ticket.track.trackName }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>Unchecked Tickets</h3>
+            <p>Unchecked Count: {{ context.unchecked_count }}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Track</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in context.unchecked_tickets %}
+                        <tr>
+                            <td>{{ ticket.user.username }}</td>
+                            <td>{{ ticket.track.trackName }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
             <canvas id="chart-{{ forloop.counter }}" width="10" height="10"></canvas>
         {% endfor %}
     

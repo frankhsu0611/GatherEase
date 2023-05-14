@@ -7,6 +7,7 @@ from authentication.models import Conference, UserProfile, Event, Paper, Track, 
 from .forms import AdminEventFileUploadForm, AdminUserProfileFileUploadForm, AdminPaperFileUploadForm
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 def home_dashboard(request):
@@ -16,7 +17,25 @@ def home_dashboard(request):
     chart_data = []
     for conference in conferences:
         user_profiles = UserProfile.objects.filter(
-            tracks__Conference=conference)
+            tickets__track__Conference=conference)
+        checked_tickets = Ticket.objects.filter(
+            track__Conference=conference, checkin=True)
+        unchecked_tickets = Ticket.objects.filter(
+            track__Conference=conference, checkin=False)
+
+        checkin_count = checked_tickets.count()
+        unchecked_count = unchecked_tickets.count()
+        total_participants = checkin_count + unchecked_count
+        checkin_percentage = round(
+            (checkin_count / total_participants) * 100, 1) if total_participants > 0 else 0
+
+        context = {
+            'checked_tickets': checked_tickets,
+            'unchecked_tickets': unchecked_tickets,
+            'checkin_count': checkin_count,
+            'unchecked_count': unchecked_count,
+            'checkin_percentage': checkin_percentage
+        }
         country_count = user_profiles.values(
             'userCountry').annotate(count=Count('userCountry'))
         chart_data.append({
@@ -24,24 +43,34 @@ def home_dashboard(request):
             'country_count': list(country_count),
         })
 
-    return render(request, 'custom_admin_dashboard/home_dashboard.html', {
-        'chart_data': chart_data,
+    return render(request, 'custom_admin_dashboard/home_dashboard.html',  {
+        'chart_data': chart_data, 'context': context,
     })
 
 # custom_admin_dashboard/admin.py
 
 
+def process_ticket(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        ticket_id = data.get('ticket_id')
+        print("Ticket ID:", ticket_id)
+        try:
+            ticket = Ticket.objects.get(ticket_id=ticket_id)
+            ticket.checkin = True
+            ticket.save()
+            print("Check-in updated successfully")
+            return JsonResponse({"success": True})
+        except Ticket.DoesNotExist:
+            print("Ticket not found")
+            return JsonResponse({"success": False})
+    return JsonResponse({"success": False})
+
+
 def scanner(request):
-    if not request.user.is_staff:
-        return HttpResponseForbidden()
-
-    checked_in_tickets = Ticket.objects.filter(checkin=True)
-    not_checked_in_tickets = Ticket.objects.filter(checkin=False)
-
-    return render(request, 'scanner.html', {
-        'checked_in_tickets': checked_in_tickets,
-        'not_checked_in_tickets': not_checked_in_tickets,
-    })
+    if request.user.is_staff:
+        return render(request, 'scanner.html')
+    return HttpResponseRedirect('/admin/')
 
 
 # @csrf_exempt
@@ -119,20 +148,23 @@ def upload_userprofiles_file(request):
                 user.userprofile.userUniversity = user_univeristy
                 # only update if the track exists
                 if not Track.objects.filter(trackCode=trackCode).exists():
-                    messages.error(request, f"Track {trackCode} does not exist.")
+                    messages.error(
+                        request, f"Track {trackCode} does not exist.")
                 else:
                     if Ticket.objects.filter(user=user, track__trackCode=trackCode).exists():
-                        messages.error(request, f"User {user.username} already has a ticket for track {trackCode}.")
+                        messages.error(
+                            request, f"User {user.username} already has a ticket for track {trackCode}.")
                     else:
                         ticket = Ticket.objects.create(
                             user=user,
                             track=Track.objects.get(trackCode=trackCode),
                         )
-                        ticket.save() # it also generate a ticket id
+                        ticket.save()  # it also generate a ticket id
                         user.userprofile.tickets.add(ticket)
                 user.save()  # Save the both user and UserProfile model instance
-                
-            messages.success(request, "User profiles have been successfully imported.")
+
+            messages.success(
+                request, "User profiles have been successfully imported.")
 
             # URL pattern of admin follows the singular form of the model name
             return redirect('admin:authentication_userprofile_changelist')
