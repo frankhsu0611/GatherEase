@@ -1,7 +1,10 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, FileResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeDoneView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from django.shortcuts import get_object_or_404
@@ -130,6 +133,29 @@ def signin(request):
             return redirect('sign-in')
 
     return render(request, 'authentication/sign-in.html')
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important, to keep the user logged in after the password change
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('password_change_done')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {'form': form})
+
+
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'password_change_done.html'
+
+
 
 
 def signout(request):
