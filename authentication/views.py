@@ -136,20 +136,41 @@ def signin(request):
     return render(request, 'authentication/sign-in.html')
 
 
-@login_required
+from django.contrib.auth import authenticate, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.models import User
+
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important, to keep the user logged in after the password change
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('password_change_done')
+        auth_form = AuthenticationForm(data=request.POST)
+        password_form = PasswordChangeForm(request.user, request.POST)
+
+        if auth_form.is_valid():
+            username = request.POST.get('username')
+            old_password = request.POST.get('old_password')
+
+            user = authenticate(request, username=username, password=old_password)
+            if user is not None:
+                if password_form.is_valid():
+                    updated_user = password_form.save(commit=False)
+                    updated_user.set_password(request.POST.get('new_password1'))
+                    updated_user.save()
+                    messages.success(request, 'Your password was successfully updated!')
+                    return redirect('password_change_done')
+                else:
+                    messages.error(request, 'Please correct the errors below.')
+            else:
+                messages.error(request, 'Invalid username or old password.')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.error(request, 'Please provide a valid username and old password.')
     else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'authentication/change_password.html', {'form': form})
+        auth_form = AuthenticationForm()
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'authentication/change_password.html', {'auth_form': auth_form, 'password_form': password_form})
+
 
 
 
