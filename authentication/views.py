@@ -4,12 +4,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeDoneView
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from django.shortcuts import get_object_or_404
-from django.template.loader import get_template
-from django.core.files.base import ContentFile
 from .api_utils import generate_qr_code
 
 # Create your views here.
@@ -136,48 +135,32 @@ def signin(request):
     return render(request, 'authentication/sign-in.html')
 
 
-from django.contrib.auth import authenticate, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.models import User
 
-def change_password(request):
+@login_required
+def password_change(request):
     if request.method == 'POST':
-        auth_form = AuthenticationForm(data=request.POST)
-        password_form = PasswordChangeForm(request.user, request.POST)
-
-        if auth_form.is_valid():
-            username = request.POST.get('username')
-            old_password = request.POST.get('old_password')
-
-            user = authenticate(request, username=username, password=old_password)
-            if user is not None:
-                if password_form.is_valid():
-                    updated_user = password_form.save(commit=False)
-                    updated_user.set_password(request.POST.get('new_password1'))
-                    updated_user.save()
-                    messages.success(request, 'Your password was successfully updated!')
-                    return redirect('password_change_done')
-                else:
-                    messages.error(request, 'Please correct the errors below.')
-            else:
-                messages.error(request, 'Invalid username or old password.')
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Update the session to keep the user logged in
+            messages.success(request, 'Your password was changed successfully!')
+            return redirect('password_change_done')
         else:
-            messages.error(request, 'Please provide a valid username and old password.')
+            old_password_errors = form.errors.get('old_password')
+            new_password_errors = form.errors.get('new_password2')
+
+            if old_password_errors:
+                messages.error(request, 'Invalid old password. Please try again.')
+
+            if new_password_errors:
+                messages.error(request, 'Invalid new password. Please ensure your password meets the requirements.')
     else:
-        auth_form = AuthenticationForm()
-        password_form = PasswordChangeForm(request.user)
+        form = PasswordChangeForm(request.user)
+    return render(request, 'authentication/password_change.html', {'form': form})
 
-    return render(request, 'authentication/change_password.html', {'auth_form': auth_form, 'password_form': password_form})
-
-
-
-
-class CustomPasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = 'authentication/password_change_done.html'
-
-
+@login_required
+def password_change_done(request):
+    return render(request, 'authentication/password_change_done.html')
 
 
 def signout(request):

@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views, api_utils
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -15,7 +16,6 @@ urlpatterns = [
     path('proceedings/download/<str:ticket_id>/', api_utils.download_proceedings, name='download_proceedings'),
     path('program/download/<str:ticket_id>/', api_utils.download_program, name='download_program'),
     path('certificate/download/<str:ticket_id>/', api_utils.download_certificate, name='download_certificate'),
-    path('change_password/', views.change_password, name='change_password'),
-    path('password_change/done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
-    #path('certificate/', views.certificate, name='download_certificate'),
+    path('password_change/', views.password_change, name='password_change'),
+    path('password_change/done/', views.password_change_done, name='password_change_done'),
 ]
