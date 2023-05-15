@@ -11,6 +11,8 @@ from datetime import datetime
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.core.files.base import ContentFile
+import qrcode
+from io import BytesIO
 
 
 def get_events(request):
@@ -65,6 +67,24 @@ def download_certificate(request, ticket_id):
         track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.certificate, as_attachment=True)
     return redirect('sign-in')
+
+def generate_qr_code(data):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=6,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = BytesIO()
+    img.save(buffer, "PNG")
+    buffer.seek(0)
+    img_data = buffer.getvalue()
+    img_b64 = base64.b64encode(img_data).decode()
+    return f'data:image/png;base64,{img_b64}'
     
 
 # def dowload_certificate(request):

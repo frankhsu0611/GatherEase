@@ -9,11 +9,8 @@ from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
-import qrcode
-from io import BytesIO
 from django.core.files.base import ContentFile
-import base64
-
+from .api_utils import generate_qr_code
 
 # Create your views here.
 
@@ -38,23 +35,6 @@ def home(request):
 #         return render(request, 'authentication/ticket.html', context)
 #     return render(request, 'authentication/index1.html')
 
-def generate_qr_code(data):
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=6,
-        border=4,
-    )
-    qr.add_data(data)
-    qr.make(fit=True)
-
-    img = qr.make_image(fill_color="black", back_color="white")
-    buffer = BytesIO()
-    img.save(buffer, "PNG")
-    buffer.seek(0)
-    img_data = buffer.getvalue()
-    img_b64 = base64.b64encode(img_data).decode()
-    return f'data:image/png;base64,{img_b64}'
 
 
 def ticket(request, ticket_id):
@@ -169,12 +149,12 @@ def change_password(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'change_password.html', {'form': form})
+    return render(request, 'authentication/change_password.html', {'form': form})
 
 
 
 class CustomPasswordChangeDoneView(PasswordChangeDoneView):
-    template_name = 'password_change_done.html'
+    template_name = 'authentication/password_change_done.html'
 
 
 
