@@ -20,7 +20,7 @@ def home(request):
         tickets = Ticket.objects.filter(user=user)
         context = {"tickets": tickets}
         return render(request, 'authentication/index.html', context)
-    return render(request, 'authentication/index1.html')
+    return render(request, 'authentication/index.html')
 
 
 # def ticket(request, track_code):
@@ -33,7 +33,6 @@ def home(request):
 #                    "track": track, "conference": conference}
 #         return render(request, 'authentication/ticket.html', context)
 #     return render(request, 'authentication/index1.html')
-
 
 
 def ticket(request, ticket_id):
@@ -135,28 +134,32 @@ def signin(request):
     return render(request, 'authentication/sign-in.html')
 
 
-
 @login_required
 def password_change(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Update the session to keep the user logged in
-            messages.success(request, 'Your password was changed successfully!')
+            # Update the session to keep the user logged in
+            update_session_auth_hash(request, user)
+            messages.success(
+                request, 'Your password was changed successfully!')
             return redirect('password_change_done')
         else:
             old_password_errors = form.errors.get('old_password')
             new_password_errors = form.errors.get('new_password2')
 
             if old_password_errors:
-                messages.error(request, 'Invalid old password. Please try again.')
+                messages.error(
+                    request, 'Invalid old password. Please try again.')
 
             if new_password_errors:
-                messages.error(request, 'Invalid new password. Please ensure your password meets the requirements.')
+                messages.error(
+                    request, 'Invalid new password. Please ensure your password meets the requirements.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'authentication/password_change.html', {'form': form})
+
 
 @login_required
 def password_change_done(request):
