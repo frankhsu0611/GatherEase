@@ -7,7 +7,6 @@ from authentication.models import Conference, UserProfile, Event, Paper, Track, 
 from .forms import AdminEventFileUploadForm, AdminUserProfileFileUploadForm, AdminPaperFileUploadForm
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 
 
 def home_dashboard(request):
@@ -48,23 +47,6 @@ def home_dashboard(request):
     })
 
 # custom_admin_dashboard/admin.py
-
-
-def process_ticket(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        ticket_id = data.get('ticket_id')
-        print("Ticket ID:", ticket_id)
-        try:
-            ticket = Ticket.objects.get(ticket_id=ticket_id)
-            ticket.checkin = True
-            ticket.save()
-            print("Check-in updated successfully")
-            return JsonResponse({"success": True})
-        except Ticket.DoesNotExist:
-            print("Ticket not found")
-            return JsonResponse({"success": False})
-    return JsonResponse({"success": False})
 
 
 def scanner(request):

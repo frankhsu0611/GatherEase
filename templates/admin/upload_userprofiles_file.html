@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Upload User Profiles</h1>
+    <a href="{% url 'download_userprofiles_template'%}">Download user profiles template</a>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
