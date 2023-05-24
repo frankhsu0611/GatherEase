@@ -24,13 +24,15 @@ class Conference(models.Model):
 
 class Track(models.Model):
     trackCode = models.CharField(max_length=20, primary_key=True)
-    trackName = models.CharField(max_length=30)
+    trackName = models.CharField(max_length=100)
     Conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     proceedings = models.FileField(upload_to='proceedings/')
     program = models.FileField(upload_to='program/')
 
+
 class Ticket(models.Model):
-    ticket_id = models.CharField(max_length=40, primary_key=True, default=uuid.uuid4)
+    ticket_id = models.CharField(
+        max_length=40, primary_key=True, default=uuid.uuid4)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     checkin = models.BooleanField(default=False)
@@ -49,6 +51,7 @@ class Ticket(models.Model):
     class Meta:
         unique_together = ('user', 'track')
         verbose_name_plural = "Tickets"
+
 
 class Event(models.Model):
     eventCode = models.CharField(max_length=20, primary_key=True)
@@ -87,6 +90,3 @@ class UserProfile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.userprofile.save()
-
-
-

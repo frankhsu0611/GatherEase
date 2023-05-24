@@ -165,12 +165,14 @@ def password_change(request):
 def password_change_done(request):
     return render(request, 'authentication/password_change_done.html')
 
+
 def about_us(request):
     return render(request, 'pages/about_us.html')
 
+
 def signout(request):
     logout(request)
-    messages.success(request, "You have been successfully logged out")
+    # messages.success(request, "You have been successfully logged out")
     return redirect('home')
 
 # write a function to show agenda page and pass a http response that contains the agenda.pdf stored in media/ducoment folder
