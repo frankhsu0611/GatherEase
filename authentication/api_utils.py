@@ -1,4 +1,3 @@
-from weasyprint import HTML
 import io
 import pytz
 import base64
