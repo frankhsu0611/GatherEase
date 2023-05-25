@@ -77,9 +77,11 @@
                 });
         });
     </script>
-        
+        <h2>Conference</h2>
         
         {% for data in chart_data %}
+        <button class="toggleButton">Toggle {{ data.conference }}</button>
+        <div class="conferenceData" style="display: none;">
         <h2>{{ data.conference }}</h2>
         <h3>Checked-in Tickets</h3>
         <p>Check-in Count: {{ context.checkin_count }}  |  Check-in Percentage: {{ context.checkin_percentage }}%</p>
@@ -121,6 +123,19 @@
             
             <canvas id="chart-{{ forloop.counter }}" width="10" height="10"></canvas>
         {% endfor %}
+
+        <script>
+            document.querySelectorAll('.toggleButton').forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    var conferenceData = document.querySelectorAll('.conferenceData')[index];
+                    if (conferenceData.style.display === 'none') {
+                        conferenceData.style.display = 'block';
+                    } else {
+                        conferenceData.style.display = 'none';
+                    }
+                });
+            });
+        </script>
     
         <script>
             const chartData = {{ chart_data|safe }};
