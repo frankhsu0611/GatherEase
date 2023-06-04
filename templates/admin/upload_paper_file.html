@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Upload Papers</h1>
+    <a href="{% url 'download_paper_template'%}">Download paper template</a>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}

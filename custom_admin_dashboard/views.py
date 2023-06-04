@@ -104,6 +104,7 @@ def upload_userprofiles_file(request):
         form = AdminUserProfileFileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             user_profiles_file = request.FILES['user_profiles_file']
+            # Assuming conferenceCode is stored in the Excel file
             wb = openpyxl.load_workbook(user_profiles_file)
             sheet = wb.active
             for row in sheet.iter_rows(min_row=2):  # Skip header row
@@ -114,7 +115,6 @@ def upload_userprofiles_file(request):
                 password = row[4].value
                 user_category = row[5].value
                 user_country = row[6].value
-                # Assuming conferenceCode is stored in the Excel file
                 trackCode = row[7].value
                 user_univeristy = row[8].value
 

@@ -3,6 +3,7 @@
 
 {% block content %}
   <h1>Upload Event File</h1>
+  <a href="{% url 'download_event_template'%}">Download event template</a>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
