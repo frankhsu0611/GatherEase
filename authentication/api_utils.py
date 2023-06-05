@@ -1,13 +1,10 @@
-import io
 import pytz
 import base64
-import pikepdf
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from datetime import datetime
-from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.core.files.base import ContentFile
 import qrcode
@@ -123,18 +120,18 @@ def generate_qr_code(data):
 #     return f"data:image/jpeg;base64,{encoded_string.decode('utf-8')}"
 
 
-def merge_pdfs(pdfs):
-    merged_pdf = pikepdf.Pdf.new()
+# def merge_pdfs(pdfs):
+#     merged_pdf = pikepdf.Pdf.new()
 
-    for pdf in pdfs:
-        pdf_bytes = pdf.getvalue()
-        src_pdf = pikepdf.Pdf.open(pdf_bytes)
+#     for pdf in pdfs:
+#         pdf_bytes = pdf.getvalue()
+#         src_pdf = pikepdf.Pdf.open(pdf_bytes)
 
-        # Append all pages from the source PDF to the merged PDF
-        for page in src_pdf.pages:
-            merged_pdf.pages.append(page)
+#         # Append all pages from the source PDF to the merged PDF
+#         for page in src_pdf.pages:
+#             merged_pdf.pages.append(page)
 
-    merged_pdf_buffer = io.BytesIO()
-    merged_pdf.save(merged_pdf_buffer)
+#     merged_pdf_buffer = io.BytesIO()
+#     merged_pdf.save(merged_pdf_buffer)
 
-    return merged_pdf_buffer
+#     return merged_pdf_buffer
