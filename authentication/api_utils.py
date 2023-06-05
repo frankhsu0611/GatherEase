@@ -1,13 +1,11 @@
 import io
 import pytz
 import base64
-import pikepdf
 from django.contrib.auth.models import User
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import redirect
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from datetime import datetime
-from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.core.files.base import ContentFile
 import qrcode
