@@ -92,25 +92,33 @@
   </aside>
   <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <div class="logo-container" style="display: flex; justify-content: center; align-items: center;">
-            <img src="{% static 'img/logo1.png' %}" alt="GatherEase Logo" style="max-width: 10%; max-height: 10%;">
+          <div class="row align-items-center">
+              <!-- Logo Section -->
+              <div class="col text-center">
+                  <div class="logo-container">
+                    <img src="{% static 'img/logo1.png' %}" alt="GatherEase Logo" style="max-width: 20%; max-height: 20%;">
+                  </div>
+              </div>
+
+              <!-- Navbar Section -->
+              <div class="col-auto">
+                  <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                      <ul class="navbar-nav">
+                          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                              <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+                                  <div class="sidenav-toggler-inner" style="transform: scale(1.5);">
+                                      <i class="sidenav-toggler-line bg-white"></i>
+                                      <i class="sidenav-toggler-line bg-white"></i>
+                                      <i class="sidenav-toggler-line bg-white"></i>
+                                  </div>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
           </div>
-        </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <ul class="navbar-nav">
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line bg-white"></i>
-                  <i class="sidenav-toggler-line bg-white"></i>
-                  <i class="sidenav-toggler-line bg-white"></i>
-                </div>
-              </a>
-          </ul>
-        </div>
       </div>
     </nav>
     <!-- End Navbar -->
