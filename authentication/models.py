@@ -70,12 +70,12 @@ class Paper(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     userCategory = models.CharField(max_length=20)
     userCountry = models.CharField(max_length=20)
     userUniversity = models.CharField(max_length=40)
     tickets = models.ManyToManyField(Ticket)
+    identifier = models.CharField(max_length=20)
 
     class Meta:
         verbose_name_plural = "UserProfiles"

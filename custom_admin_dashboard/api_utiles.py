@@ -9,7 +9,7 @@ from authentication.models import Ticket
 
 
 class ExcelTemplateGenerator:
-    def generate_template(self, header):
+    def generate_template(self, headers):
         wb = openpyxl.Workbook()
         sheet = wb.active
 
@@ -29,7 +29,7 @@ class ExcelTemplateGenerator:
 
 def download_userprofiles_template(request):
     generator = ExcelTemplateGenerator()
-    headers = ["Username", "First Name", "Last Name", "Email", "Password", "User Category", "User Country", "Track Code", "User University"]
+    headers = ["Username", "First Name", "Last Name", "Email", "Password", "User Category", "User Country", "Track Code", "User University", "identifier"]
     wb = generator.generate_template(headers)
     return generator.download_template(wb, 'userprofiles_template.xlsx')
 

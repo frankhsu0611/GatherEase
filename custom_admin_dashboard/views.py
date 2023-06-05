@@ -117,7 +117,8 @@ def upload_userprofiles_file(request):
                 user_country = row[6].value
                 trackCode = row[7].value
                 user_univeristy = row[8].value
-
+                identifier = row[9].value
+                
                 user, created = User.objects.get_or_create(
                     username=username,
                     email=email,
@@ -128,6 +129,7 @@ def upload_userprofiles_file(request):
                 user.userprofile.userCategory = user_category
                 user.userprofile.userCountry = user_country
                 user.userprofile.userUniversity = user_univeristy
+                user.userprofile.identifier = identifier
                 # only update if the track exists
                 if not Track.objects.filter(trackCode=trackCode).exists():
                     messages.error(
