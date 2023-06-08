@@ -37,8 +37,6 @@
                 scanner = new Instascan.Scanner({ video: preview });
                 scanner.addListener("scan", (content) => {
                     console.log(content);
-                    scanner.addListener('scan', function (content) {
-                    console.log(content);
                     // Use AJAX to send the scanned ticket ID to a Django view for processing
                     fetch('/admin/process_ticket/', {
                         method: 'POST',
@@ -59,9 +57,8 @@
                         }
                     });
                 });
-
-                });
             }
+
     
             Instascan.Camera.getCameras()
                 .then((cameras) => {
