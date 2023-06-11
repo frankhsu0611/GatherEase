@@ -187,7 +187,7 @@ def agenda(request, ticket_id):
         ticket = Ticket.objects.get(ticket_id=ticket_id)
         track_code = ticket.track.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
-        conference = track.Conference
+        conference = track.conference
         context = {"ticket": ticket, "track": track, "conference": conference}
         return render(request, 'pages/agenda.html', context)
     return redirect('sign-in')
@@ -199,7 +199,7 @@ def download(request, ticket_id):
         ticket = Ticket.objects.get(ticket_id=ticket_id)
         track_code = ticket.track.trackCode
         track = get_object_or_404(Track, trackCode=track_code)
-        conference = track.Conference
+        conference = track.conference
         context = {"ticket": ticket, "track": track, "conference": conference}
         return render(request, 'pages/download.html', context)
     return redirect('sign-in')
