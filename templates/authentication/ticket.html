@@ -112,7 +112,7 @@
               </div>
             {% endfor %}
 
-            <script>
+            {% comment %} <script>
               window.onload = function () {
                 var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
               
@@ -128,7 +128,26 @@
                   document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(datetime_obj);
                 {% endfor %}
               }
-            </script>
+            </script> {% endcomment %}
+
+            <script>
+              window.onload = function () {
+                  var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+          
+                  {% for event in events_now %}
+                      var datetime_str = document.getElementById('eventsNow{{ forloop.counter }}').innerHTML;
+                      var datetime_obj = new Date(datetime_str);
+                      document.getElementById('eventsNow{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(new Date(datetime_obj.toISOString()));
+                  {% endfor %}
+          
+                  {% for event in events_following %}
+                      var datetime_str = document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML;
+                      var datetime_obj = new Date(datetime_str);
+                      document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(new Date(datetime_obj.toISOString()));
+                  {% endfor %}
+              }
+          </script>
+          
               
       
               {% for event in events_following %}

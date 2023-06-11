@@ -55,7 +55,7 @@ def ticket(request, ticket_id):
             "events_following": events_following,
         }
         return render(request, 'authentication/ticket.html', context)
-    return render(request, 'authentication/index1.html')
+    return render(request, 'authentication/sign-up.html')
 
 
 def signup(request):
