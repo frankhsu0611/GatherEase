@@ -115,7 +115,7 @@
               </div>
             {% endfor %}
 
-            <!-- {% comment %} <script>
+            {% comment %} <script>
               window.onload = function () {
                 var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
               
@@ -145,14 +145,7 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
-<<<<<<< HEAD
-                    <h6 class="text-sm mb-0" id="eventsFollowing{{forloop.counter}}">{{ event.eventStartTime|date:"Y-m-d H:i T"}}</h6>
-=======
-                    {% load tz %} 
-                    {% timezone "Asia/Taipei" %}
                     <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
-                    {% endtimezone %}
->>>>>>> 31abe253902789649b80e542b1413bc47eb38181
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -172,7 +165,8 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> {% endcomment %}
+      
       
 
 {% endblock %}
