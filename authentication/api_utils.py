@@ -9,20 +9,32 @@ from django.template.loader import get_template
 from django.core.files.base import ContentFile
 import qrcode
 from io import BytesIO
+from django.utils import timezone
 
 
-def get_events(request):
+def get_events(request, conference):
     user = request.user
     if user.is_authenticated:
-        local_timezone = pytz.timezone('America/Los_Angeles')
-        now = datetime.now(local_timezone)  # UTC time
-        events_now = Event.objects.filter(conference=UserProfile.objects.get(user=user).conference,
+        local_timezone = pytz.timezone('Asia/Taipei')
+        now = timezone.now()  # UTC time
+        events_now = Event.objects.filter(conference=conference,
                                           eventStartTime__lte=now,
                                           eventEndTime__gte=now,
                                           ).order_by('eventStartTime')
-        events_following = Event.objects.filter(conference=UserProfile.objects.get(user=user).conference,
+        events_following = Event.objects.filter(conference=conference,
                                                 eventStartTime__gte=now,
                                                 ).order_by('eventStartTime')
+        # Convert event times to Taipei timezone
+        for event in events_now:
+            event.eventStartTime = event.eventStartTime.astimezone(
+                local_timezone)
+            event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
+
+        for event in events_following:
+            event.eventStartTime = event.eventStartTime.astimezone(
+                local_timezone)
+            event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
+
         print(events_following)
         return (events_now, events_following)
     return None
@@ -35,6 +47,7 @@ def get_tracks(request):
         tracks = userProfile.tracks.all()
         return tracks
     return None
+
 
 def download_proceedings(request, ticket_id):
     user = request.user
@@ -55,6 +68,7 @@ def download_program(request, ticket_id):
         return FileResponse(track.program, as_attachment=True)
     return redirect('sign-in')
 
+
 def download_certificate(request, ticket_id):
     user = request.user
     if user.is_authenticated:
@@ -63,6 +77,7 @@ def download_certificate(request, ticket_id):
         track = Track.objects.get(trackCode=track_code)
         return FileResponse(track.certificate, as_attachment=True)
     return redirect('sign-in')
+
 
 def generate_qr_code(data):
     qr = qrcode.QRCode(
@@ -81,7 +96,7 @@ def generate_qr_code(data):
     img_data = buffer.getvalue()
     img_b64 = base64.b64encode(img_data).decode()
     return f'data:image/png;base64,{img_b64}'
-    
+
 
 # def dowload_certificate(request):
 #     if request.user.is_authenticated:

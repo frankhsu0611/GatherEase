@@ -94,7 +94,7 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
-                    <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
+                    <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -124,7 +124,7 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
-                    <h6 class="text-sm mb-0">{{ event.eventStartTime }}</h6>
+                    <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">

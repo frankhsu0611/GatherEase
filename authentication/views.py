@@ -44,7 +44,7 @@ def ticket(request, ticket_id):
         conference = track.Conference
         ticket = get_object_or_404(Ticket, user=user, track=track)
         qr_code = generate_qr_code(str(ticket_id))
-        events_now, events_following = get_events(request)
+        events_now, events_following = get_events(request, conference)
         context = {
             "ticket": ticket,
             "userProfile": userProfile,
