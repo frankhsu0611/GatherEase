@@ -29,13 +29,12 @@ def get_events(request, conference):
             event.eventStartTime = event.eventStartTime.astimezone(
                 local_timezone)
             event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
-
+            print(123)
+            print(event.eventStartTime)
         for event in events_following:
             event.eventStartTime = event.eventStartTime.astimezone(
                 local_timezone)
             event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
-
-        print(events_following)
         return (events_now, events_following)
     return None
 

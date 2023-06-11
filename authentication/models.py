@@ -25,7 +25,7 @@ class Conference(models.Model):
 class Track(models.Model):
     trackCode = models.CharField(max_length=20, primary_key=True)
     trackName = models.CharField(max_length=100)
-    Conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
+    conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     proceedings = models.FileField(upload_to='proceedings/')
     program = models.FileField(upload_to='program/')
 
