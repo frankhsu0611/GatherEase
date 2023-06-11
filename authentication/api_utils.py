@@ -24,17 +24,6 @@ def get_events(request, conference):
         events_following = Event.objects.filter(conference=conference,
                                                 eventStartTime__gte=now,
                                                 ).order_by('eventStartTime')
-        # Convert event times to Taipei timezone
-        for event in events_now:
-            event.eventStartTime = event.eventStartTime.astimezone(
-                local_timezone)
-            event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
-            print(123)
-            print(event.eventStartTime)
-        for event in events_following:
-            event.eventStartTime = event.eventStartTime.astimezone(
-                local_timezone)
-            event.eventEndTime = event.eventEndTime.astimezone(local_timezone)
         return (events_now, events_following)
     return None
 

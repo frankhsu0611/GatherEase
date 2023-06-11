@@ -1,5 +1,6 @@
 {% extends 'ticketBase.html' %}
 {% load static %}
+{% load tz %}
 
 
 {% block content %}
@@ -80,7 +81,7 @@
                 <h6 class="mb-2">Events</h6>
               </div>
             </div>
-            
+
             <div class="card-body">
               {% for event in events_now %}
               <div class="row mb-3" style="background-color: #d1e9f3; border-radius: 8px; padding: 10px;  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
@@ -94,7 +95,7 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
-                    <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
+                    <h6 class="text-sm mb-0" id="eventsNow{{forloop.counter}}">{{ event.eventStartTime|date:"Y-m-d H:i T" }}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -112,6 +113,24 @@
               </div>
             {% endfor %}
 
+            <script>
+              window.onload = function () {
+                var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+              
+                {% for event in events_now %}
+                  var datetime_str = document.getElementById('eventsNow{{ forloop.counter }}').innerHTML;
+                  var datetime_obj = new Date(datetime_str);
+                  document.getElementById('eventsNow{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(datetime_obj);
+                {% endfor %}
+              
+                {% for event in events_following %}
+                  var datetime_str = document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML;
+                  var datetime_obj = new Date(datetime_str);
+                  document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(datetime_obj);
+                {% endfor %}
+              }
+            </script>
+              
       
               {% for event in events_following %}
               <div class="row mb-3" style="padding: 10px;">
@@ -124,7 +143,7 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
-                    <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
+                    <h6 class="text-sm mb-0" id="eventsFollowing{{forloop.counter}}">{{ event.eventStartTime|date:"Y-m-d H:i T"}}</h6>
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
