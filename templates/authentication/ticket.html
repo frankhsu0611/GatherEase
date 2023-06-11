@@ -1,5 +1,6 @@
 {% extends 'ticketBase.html' %}
 {% load static %}
+{% load tz %}
 
 
 {% block content %}
@@ -131,7 +132,7 @@
                   document.getElementById('eventsFollowing{{ forloop.counter }}').innerHTML = new Intl.DateTimeFormat(undefined, options).format(datetime_obj);
                 {% endfor %}
               }
-            </script>
+            </script> {% endcomment %}
               
       
               {% for event in events_following %}
@@ -145,7 +146,10 @@
                 <div class="col-6 col-md-3">
                   <div style="display: flex; align-items: center;">
                     <img src="{% static 'img/icons/event/time1.png' %}" alt="Event flag" style="margin-right: 4px; height: 12px;">
+                    {% load tz %} 
+                    {% timezone "Asia/Taipei" %}
                     <h6 class="text-sm mb-0">{{ event.eventStartTime|date:"H:i M j" }}</h6>
+                    {% endtimezone %}
                   </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -165,8 +169,7 @@
             </div>
           </div>
         </div>
-      </div> {% endcomment %}
-      
+      </div>
       
 
 {% endblock %}
