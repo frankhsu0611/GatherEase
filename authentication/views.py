@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import UserProfile, Conference, Event, Paper, Track, Ticket
 from django.shortcuts import get_object_or_404
-from .api_utils import generate_qr_code
+from .api_utils import generate_qr_code, get_events
 
 # Create your views here.
 
@@ -44,12 +44,15 @@ def ticket(request, ticket_id):
         conference = track.Conference
         ticket = get_object_or_404(Ticket, user=user, track=track)
         qr_code = generate_qr_code(str(ticket_id))
+        events_now, events_following = get_events(request)
         context = {
             "ticket": ticket,
             "userProfile": userProfile,
             "track": track,
             "conference": conference,
-            "qr_code": qr_code
+            "qr_code": qr_code,
+            "events_now": events_now,
+            "events_following": events_following,
         }
         return render(request, 'authentication/ticket.html', context)
     return render(request, 'authentication/index1.html')
