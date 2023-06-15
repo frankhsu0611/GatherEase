@@ -81,6 +81,8 @@ def upload_event_file(request):
             wb = openpyxl.load_workbook(event_file)
             sheet = wb.active
             for row in sheet.iter_rows(min_row=2):  # Skip header row
+                if row[0].value == None:
+                    break
                 event = Event(
                     eventCode=row[0].value,
                     eventTheme=row[1].value,
@@ -167,6 +169,8 @@ def upload_paper_file(request):
             wb = openpyxl.load_workbook(paper_file)
             sheet = wb.active
             for row in sheet.iter_rows(min_row=2):  # Skip header row
+                if row[0].value == None:
+                    break
                 user_email = row[0].value
                 user = User.objects.get(email=user_email)
                 paper = Paper(
