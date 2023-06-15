@@ -12,7 +12,7 @@ CONFERENCE_CODE = 'ICEASS2021'
 
 
 class Conference(models.Model):
-    conferenceCode = models.CharField(max_length=20, primary_key=True)
+    conferenceCode = models.CharField(max_length=100, primary_key=True)
     conferenceName = models.CharField(
         max_length=100, default='adminConference')
     conferenceStartDate = models.DateField(default=CONFERENCE_START_DATE)
@@ -23,7 +23,7 @@ class Conference(models.Model):
 
 
 class Track(models.Model):
-    trackCode = models.CharField(max_length=20, primary_key=True)
+    trackCode = models.CharField(max_length=100, primary_key=True)
     trackName = models.CharField(max_length=100)
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
     proceedings = models.FileField(upload_to='proceedings/')
@@ -54,28 +54,28 @@ class Ticket(models.Model):
 
 
 class Event(models.Model):
-    eventCode = models.CharField(max_length=20, primary_key=True)
-    eventTheme = models.CharField(max_length=20)
+    eventCode = models.CharField(max_length=100, primary_key=True)
+    eventTheme = models.CharField(max_length=100)
     eventStartTime = models.DateTimeField()
     eventEndTime = models.DateTimeField()
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
-    keynoteSpeaker = models.CharField(max_length=20)
-    eventRoom = models.CharField(max_length=20)
+    keynoteSpeaker = models.CharField(max_length=100)
+    eventRoom = models.CharField(max_length=100)
 
 
 class Paper(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    paperID = models.CharField(max_length=20, primary_key=True)
+    paperID = models.CharField(max_length=100, primary_key=True)
     paperTitle = models.CharField(max_length=200)
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    userCategory = models.CharField(max_length=20)
-    userCountry = models.CharField(max_length=20)
-    userUniversity = models.CharField(max_length=40)
+    userCategory = models.CharField(max_length=100)
+    userCountry = models.CharField(max_length=100)
+    userUniversity = models.CharField(max_length=100, null=True)
     tickets = models.ManyToManyField(Ticket)
-    identifier = models.CharField(max_length=20)
+    identifier = models.CharField(max_length=100)
 
     class Meta:
         verbose_name_plural = "UserProfiles"
