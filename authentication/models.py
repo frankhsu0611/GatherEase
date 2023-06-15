@@ -59,7 +59,7 @@ class Event(models.Model):
     eventStartTime = models.DateTimeField()
     eventEndTime = models.DateTimeField()
     conference = models.ForeignKey(Conference, on_delete=models.CASCADE)
-    keynoteSpeaker = models.CharField(max_length=100)
+    keynoteSpeaker = models.CharField(max_length=100, null=True)
     eventRoom = models.CharField(max_length=100)
 
 

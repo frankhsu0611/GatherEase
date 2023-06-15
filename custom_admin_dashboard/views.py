@@ -127,11 +127,11 @@ def upload_userprofiles_file(request):
                 user.set_password(password)
                 user.first_name = fname
                 user.last_name = lname
-                userprofile = UserProfile.objects.get(user=user)
-                userprofile.userCategory = user_category
-                userprofile.userCountry = user_country
-                userprofile.userUniversity = user_univeristy
-                userprofile.identifier = identifier
+                user.userprofile.userCategory = user_category
+                user.userprofile.userCountry = user_country
+                user.userprofile.userUniversity = user_univeristy
+                user.userprofile.identifier = identifier
+                user.save()  # Save the both user and UserProfile model instance
                 # only update if the track exists
                 if not Track.objects.filter(trackCode=trackCode).exists():
                     messages.error(
@@ -147,7 +147,6 @@ def upload_userprofiles_file(request):
                         )
                         ticket.save()  # it also generate a ticket id
                         user.userprofile.tickets.add(ticket)
-                user.save()  # Save the both user and UserProfile model instance
 
             messages.success(
                 request, "User profiles have been successfully imported.")
