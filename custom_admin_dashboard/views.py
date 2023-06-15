@@ -16,11 +16,11 @@ def home_dashboard(request):
     chart_data = []
     for conference in conferences:
         user_profiles = UserProfile.objects.filter(
-            tickets__track__Conference=conference)
+            tickets__track__conference=conference)
         checked_tickets = Ticket.objects.filter(
-            track__Conference=conference, checkin=True)
+            track__conference=conference, checkin=True)
         unchecked_tickets = Ticket.objects.filter(
-            track__Conference=conference, checkin=False)
+            track__conference=conference, checkin=False)
 
         checkin_count = checked_tickets.count()
         unchecked_count = unchecked_tickets.count()
