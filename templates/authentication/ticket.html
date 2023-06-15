@@ -16,6 +16,9 @@
                       <p class="text-sm mb-0 text-uppercase font-weight-bold">Paper ID</p>
                       <h5 class="font-weight-bolder">
                         {{ userProfile.identifier }}
+                        {% if ticket.checkin %}
+                                        <img src="{% static 'img/check.png' %}" alt="checked in" style="width: 20px; height: 20px;">
+                        {% endif %}
                       </h5>
                       <p class="text-sm mb-0 text-uppercase font-weight-bold">Email</p>
                       <h5 class="font-weight-bolder">
