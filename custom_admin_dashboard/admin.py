@@ -20,7 +20,7 @@ admin.site.register(Event, EventAdmin)
 
 class UserProfileAdmin(admin.ModelAdmin):
     change_list_template = 'admin/userprofiles_change_list.html'
-
+    list_display = ('user', 'userCategory', 'identifier')
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
